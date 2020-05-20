@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>$id$</id>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <title>SFB.Web.Infrastructure</title>
     <authors>Department for Education</authors>
     <owners>Department for Education</owners>
@@ -10,7 +10,7 @@
     <license type="expression">MIT</license>
     <projectUrl>https://github.com/DFEAGILEDEVOPS/SFB.Web.Infrastructure</projectUrl>
     <description>Infrastructure class library for Schools Financial Benchmarking service</description>
-    <releaseNotes>Version upgrade</releaseNotes>
+    <releaseNotes>Initial release</releaseNotes>
     <copyright>Copyright 2020</copyright>
   </metadata>
 </package>
