@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>$id$</id>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <title>SFB.Web.Infrastructure</title>
     <authors>Department for Education</authors>
     <owners>Department for Education</owners>
@@ -12,5 +12,8 @@
     <description>Infrastructure class library for Schools Financial Benchmarking service</description>
     <releaseNotes>Initial release</releaseNotes>
     <copyright>Copyright 2020</copyright>
+	<dependencies>
+      <group targetFramework=".NETFramework4.7.2" />
+    </dependencies>
   </metadata>
 </package>

@@ -272,3 +272,4 @@ C:\DfE\Workspace\SFB.Web.Infrastructure\obj\Debug\SFB.Web.Infrastructure.csproj.
 C:\DfE\Workspace\SFB.Web.Infrastructure\obj\Debug\SFB.Web.Infrastructure.csproj.CopyComplete
 C:\DfE\Workspace\SFB.Web.Infrastructure\obj\Debug\SFB.Web.Infrastructure.dll
 C:\DfE\Workspace\SFB.Web.Infrastructure\obj\Debug\SFB.Web.Infrastructure.pdb
+C:\DfE\Workspace\SFB.Web.Infrastructure\bin\Debug\JWT.pdb

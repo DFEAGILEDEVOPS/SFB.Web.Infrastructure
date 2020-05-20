@@ -947,6 +947,11 @@
         <member name="P:Microsoft.ApplicationInsights.DataContracts.ExceptionTelemetry.ProactiveSamplingDecision">
             <inheritdoc/>
         </member>
+        <member name="P:Microsoft.ApplicationInsights.DataContracts.ExceptionTelemetry.MetricExtractorInfo">
+            <summary>
+            Gets or sets the MetricExtractorInfo.
+            </summary>
+        </member>
         <member name="M:Microsoft.ApplicationInsights.DataContracts.ExceptionTelemetry.DeepClone">
             <summary>
             Deeply clones a <see cref="T:Microsoft.ApplicationInsights.DataContracts.ExceptionTelemetry"/> object.
@@ -2177,6 +2182,11 @@
         </member>
         <member name="P:Microsoft.ApplicationInsights.DataContracts.TraceTelemetry.ProactiveSamplingDecision">
             <inheritdoc/>
+        </member>
+        <member name="P:Microsoft.ApplicationInsights.DataContracts.TraceTelemetry.MetricExtractorInfo">
+            <summary>
+            Gets or sets the MetricExtractorInfo.
+            </summary>
         </member>
         <member name="M:Microsoft.ApplicationInsights.DataContracts.TraceTelemetry.DeepClone">
             <summary>
@@ -4618,6 +4628,38 @@
             <param name="fromItem">The telemetry item from which to extract the metric data points.</param>
             <param name="isItemProcessed">Whether of not the specified item was processed (aka not ignored) by this extractor.</param>
         </member>
+        <member name="T:Microsoft.ApplicationInsights.Extensibility.Implementation.Metrics.ExceptionMetricsExtractor">
+            <summary>
+            An instance of this class is contained within the <see cref="T:Microsoft.ApplicationInsights.Extensibility.AutocollectedMetricsExtractor"/> telemetry processor.
+            It extracts auto-collected, pre-aggregated metrics from ExceptionTelemetry objects which represent
+            count of Exceptions tracked in this service.
+            </summary>
+        </member>
+        <member name="F:Microsoft.ApplicationInsights.Extensibility.Implementation.Metrics.ExceptionMetricsExtractor.MaxCloudRoleInstanceValuesToDiscoverDefault">
+            <summary>
+            The default value for the <see cref="P:Microsoft.ApplicationInsights.Extensibility.Implementation.Metrics.ExceptionMetricsExtractor.MaxCloudRoleInstanceValuesToDiscover"/> property.
+            </summary>
+        </member>
+        <member name="F:Microsoft.ApplicationInsights.Extensibility.Implementation.Metrics.ExceptionMetricsExtractor.MaxCloudRoleNameValuesToDiscoverDefault">
+            <summary>
+            The default value for the <see cref="P:Microsoft.ApplicationInsights.Extensibility.Implementation.Metrics.ExceptionMetricsExtractor.MaxCloudRoleNameValuesToDiscover"/> property.
+            </summary>
+        </member>
+        <member name="F:Microsoft.ApplicationInsights.Extensibility.Implementation.Metrics.ExceptionMetricsExtractor.exceptionServerMetric">
+            <summary>
+            Extracted metric.
+            </summary>
+        </member>
+        <member name="P:Microsoft.ApplicationInsights.Extensibility.Implementation.Metrics.ExceptionMetricsExtractor.MaxCloudRoleInstanceValuesToDiscover">
+            <summary>
+            Gets or sets the maximum number of auto-discovered Cloud RoleInstance values.
+            </summary>
+        </member>
+        <member name="P:Microsoft.ApplicationInsights.Extensibility.Implementation.Metrics.ExceptionMetricsExtractor.MaxCloudRoleNameValuesToDiscover">
+            <summary>
+            Gets or sets the maximum number of auto-discovered Cloud RoleName values.
+            </summary>
+        </member>
         <member name="P:Microsoft.ApplicationInsights.Extensibility.Implementation.Metrics.ISpecificAutocollectedMetricsExtractor.ExtractorName">
             <summary>
             Gets the name of this extractor.
@@ -4687,6 +4729,38 @@
             </summary>
         </member>
         <member name="P:Microsoft.ApplicationInsights.Extensibility.Implementation.Metrics.RequestMetricsExtractor.MaxCloudRoleNameValuesToDiscover">
+            <summary>
+            Gets or sets the maximum number of auto-discovered Cloud RoleName values.
+            </summary>
+        </member>
+        <member name="T:Microsoft.ApplicationInsights.Extensibility.Implementation.Metrics.TraceMetricsExtractor">
+            <summary>
+            An instance of this class is contained within the <see cref="T:Microsoft.ApplicationInsights.Extensibility.AutocollectedMetricsExtractor"/> telemetry processor.
+            It extracts auto-collected, pre-aggregated metrics from TraceTelemetry objects which represent
+            count of Trace telemetry tracked in this service.
+            </summary>
+        </member>
+        <member name="F:Microsoft.ApplicationInsights.Extensibility.Implementation.Metrics.TraceMetricsExtractor.MaxCloudRoleInstanceValuesToDiscoverDefault">
+            <summary>
+            The default value for the <see cref="P:Microsoft.ApplicationInsights.Extensibility.Implementation.Metrics.TraceMetricsExtractor.MaxCloudRoleInstanceValuesToDiscover"/> property.
+            </summary>
+        </member>
+        <member name="F:Microsoft.ApplicationInsights.Extensibility.Implementation.Metrics.TraceMetricsExtractor.MaxCloudRoleNameValuesToDiscoverDefault">
+            <summary>
+            The default value for the <see cref="P:Microsoft.ApplicationInsights.Extensibility.Implementation.Metrics.TraceMetricsExtractor.MaxCloudRoleNameValuesToDiscover"/> property.
+            </summary>
+        </member>
+        <member name="F:Microsoft.ApplicationInsights.Extensibility.Implementation.Metrics.TraceMetricsExtractor.traceCountMetric">
+            <summary>
+            Extracted metric.
+            </summary>
+        </member>
+        <member name="P:Microsoft.ApplicationInsights.Extensibility.Implementation.Metrics.TraceMetricsExtractor.MaxCloudRoleInstanceValuesToDiscover">
+            <summary>
+            Gets or sets the maximum number of auto-discovered Cloud RoleInstance values.
+            </summary>
+        </member>
+        <member name="P:Microsoft.ApplicationInsights.Extensibility.Implementation.Metrics.TraceMetricsExtractor.MaxCloudRoleNameValuesToDiscover">
             <summary>
             Gets or sets the maximum number of auto-discovered Cloud RoleName values.
             </summary>
@@ -5332,6 +5406,34 @@
         <member name="P:Microsoft.ApplicationInsights.Extensibility.AutocollectedMetricsExtractor.MaxDependencyCloudRoleNameValuesToDiscover">
             <summary>
             Gets or sets the maximum distinct values for CloudRoleName for Dependency telemetry.
+            Values encountered after this limit is hit will be collapsed into a single value DIMENSION_CAPPED.
+            Setting 0 will all values to be replaced with a single value "Other".
+            </summary>
+        </member>
+        <member name="P:Microsoft.ApplicationInsights.Extensibility.AutocollectedMetricsExtractor.MaxExceptionCloudRoleInstanceValuesToDiscover">
+            <summary>
+            Gets or sets the maximum distinct values for CloudRoleInstance for Exception telemetry.
+            Values encountered after this limit is hit will be collapsed into a single value DIMENSION_CAPPED.
+            Setting 0 will all values to be replaced with a single value "Other".
+            </summary>
+        </member>
+        <member name="P:Microsoft.ApplicationInsights.Extensibility.AutocollectedMetricsExtractor.MaxExceptionCloudRoleNameValuesToDiscover">
+            <summary>
+            Gets or sets the maximum distinct values for CloudRoleName for Exception telemetry.
+            Values encountered after this limit is hit will be collapsed into a single value DIMENSION_CAPPED.
+            Setting 0 will all values to be replaced with a single value "Other".
+            </summary>
+        </member>
+        <member name="P:Microsoft.ApplicationInsights.Extensibility.AutocollectedMetricsExtractor.MaxTraceCloudRoleInstanceValuesToDiscover">
+            <summary>
+            Gets or sets the maximum distinct values for CloudRoleInstance for Trace telemetry.
+            Values encountered after this limit is hit will be collapsed into a single value DIMENSION_CAPPED.
+            Setting 0 will all values to be replaced with a single value "Other".
+            </summary>
+        </member>
+        <member name="P:Microsoft.ApplicationInsights.Extensibility.AutocollectedMetricsExtractor.MaxTraceCloudRoleNameValuesToDiscover">
+            <summary>
+            Gets or sets the maximum distinct values for CloudRoleName for Trace telemetry.
             Values encountered after this limit is hit will be collapsed into a single value DIMENSION_CAPPED.
             Setting 0 will all values to be replaced with a single value "Other".
             </summary>
