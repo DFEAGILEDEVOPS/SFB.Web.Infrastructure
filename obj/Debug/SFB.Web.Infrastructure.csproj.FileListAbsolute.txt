@@ -333,5 +333,3 @@ C:\DfE\Workspace\SFB_NEW_NEW\Web\SFB.Web.Infrastructure\bin\Debug\System.Buffers
 C:\DfE\Workspace\SFB_NEW_NEW\Web\SFB.Web.Infrastructure\bin\Debug\System.Memory.xml
 C:\DfE\Workspace\SFB_NEW_NEW\Web\SFB.Web.Infrastructure\bin\Debug\JWT.pdb
 C:\DfE\Workspace\SFB_NEW_NEW\Web\SFB.Web.Infrastructure\obj\Debug\SFB.Web.Infrastructure.csproj.CoreCompileInputs.cache
-C:\DfE\Workspace\SFB.Web.Infrastructure\obj\Debug\SFB.Web.Infrastructure.dll
-C:\DfE\Workspace\SFB.Web.Infrastructure\obj\Debug\SFB.Web.Infrastructure.pdb
