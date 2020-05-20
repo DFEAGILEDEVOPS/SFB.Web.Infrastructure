@@ -24,9 +24,10 @@ steps:
 - task: VSBuild@1
   inputs:
     solution: '**\*.sln'
-    platform: '$(BuildPlatform)'
+    platform: '$(BuildPlatform)'''
     configuration: '$(BuildConfiguration)'
     clean: true
+    restoreNugetPackages: true
 - task: CopyFiles@2
   inputs:
     Contents: '**'
