@@ -273,3 +273,7 @@ C:\DfE\Workspace\SFB.Web.Infrastructure\obj\Debug\SFB.Web.Infrastructure.csproj.
 C:\DfE\Workspace\SFB.Web.Infrastructure\obj\Debug\SFB.Web.Infrastructure.dll
 C:\DfE\Workspace\SFB.Web.Infrastructure\obj\Debug\SFB.Web.Infrastructure.pdb
 C:\DfE\Workspace\SFB.Web.Infrastructure\bin\Debug\JWT.pdb
+C:\DfE\Workspace\SFB.Web.Infrastructure\bin\Debug\System.Configuration.ConfigurationManager.xml
+C:\DfE\Workspace\SFB.Web.Infrastructure\bin\Debug\System.Security.AccessControl.xml
+C:\DfE\Workspace\SFB.Web.Infrastructure\bin\Debug\System.Security.Permissions.xml
+C:\DfE\Workspace\SFB.Web.Infrastructure\bin\Debug\System.Security.Principal.Windows.xml
