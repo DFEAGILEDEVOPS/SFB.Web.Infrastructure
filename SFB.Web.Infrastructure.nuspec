@@ -10,7 +10,7 @@
     <license type="expression">MIT</license>
     <projectUrl>https://github.com/DFEAGILEDEVOPS/SFB.Web.Infrastructure</projectUrl>
     <description>Infrastructure class library for Schools Financial Benchmarking service</description>
-    <releaseNotes>Initial release</releaseNotes>
+    <releaseNotes>Upgraded version and package configuration</releaseNotes>
     <copyright>Copyright 2020</copyright>
 	<dependencies>
       <group targetFramework=".NETFramework4.7.2" />
