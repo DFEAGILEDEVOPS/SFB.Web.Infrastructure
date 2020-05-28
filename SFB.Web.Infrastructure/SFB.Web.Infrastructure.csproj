@@ -127,7 +127,7 @@
       <HintPath>..\packages\RestSharp.106.10.1\lib\net452\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="SFB.Web.ApplicationCore, Version=1.0.1.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFB.Web.ApplicationCore.1.0.6\lib\net472\SFB.Web.ApplicationCore.dll</HintPath>
+      <HintPath>..\packages\SFB.Web.ApplicationCore.1.0.7\lib\net472\SFB.Web.ApplicationCore.dll</HintPath>
     </Reference>
     <Reference Include="StackExchange.Redis, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c219ff1ca8c2ce46, processorArchitecture=MSIL">
       <HintPath>..\packages\StackExchange.Redis.2.0.601\lib\net472\StackExchange.Redis.dll</HintPath>
@@ -276,6 +276,7 @@
     <Compile Include="Logging\NetCoreLogManager.cs" />
     <Compile Include="Email\NotifyEmailSendingService.cs" />
     <Compile Include="Helpers\DataCollectionManager.cs" />
+    <Compile Include="Repositories\CosmosDBSelfAssesmentDashboardRepository.cs" />
     <Compile Include="Repositories\EfficiencyMetricRepository.cs" />
     <Compile Include="Repositories\CosmosDbEdubaseRepository.cs" />
     <Compile Include="SearchEngine\AzureSchoolSearchService.cs" />
