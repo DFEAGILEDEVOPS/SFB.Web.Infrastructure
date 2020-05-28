@@ -36,7 +36,7 @@ namespace SFB.Web.Infrastructure.Repositories
             var container = _client.GetContainer(_databaseId, "SADSizeLookup");
 
             var queryString = $"SELECT * FROM c WHERE " +
-                $"c.OverallPhase=@OverallPhase and c.HasSixthForm=@HasSixthForm " +
+                $"c.OverallPhase=@OverallPhase and (is_null(c.HasSixthForm) or c.HasSixthForm=@HasSixthForm) " +
                 $"and c.NoPupilsMin <= @NoPupils and c.NoPupilsMax >= @NoPupils " +
                 $"and c.Term=@Term";
 
@@ -57,7 +57,7 @@ namespace SFB.Web.Infrastructure.Repositories
             var container = _client.GetContainer(_databaseId, "SADFSMLookup");
 
             var queryString = $"SELECT * FROM c WHERE " +
-                $"c.OverallPhase=@OverallPhase and c.HasSixthForm=@HasSixthForm " +
+                $"c.OverallPhase=@OverallPhase and (is_null(c.HasSixthForm) or c.HasSixthForm=@HasSixthForm) " +
                 $"and c.FSMMin <= @FSM and c.FSMMax >= @FSM " +
                 $"and c.Term=@Term";
 
