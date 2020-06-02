@@ -4,8 +4,10 @@ using SFB.Web.ApplicationCore.DataAccess;
 using SFB.Web.ApplicationCore.Entities;
 using SFB.Web.ApplicationCore.Helpers.Enums;
 using SFB.Web.Infrastructure.Logging;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -78,11 +80,14 @@ namespace SFB.Web.Infrastructure.Repositories
             var container = _client.GetContainer(_databaseId, "SADSchoolRatingsPerAssessmentArea");
 
             var queryString = $"SELECT * FROM c WHERE " +
-                $"c.AssessmentArea=@AssesmentArea "+
-                $"and c.OverallPhase=@OverallPhase and (is_null(c.HasSixthForm) or c.HasSixthForm=@HasSixthForm) " +
-                $"and c.FinancialType=@FinancialType and (is_null(c.LondonWeighting) or c.LondonWeighting=@LondonWeighting) " +
-                $"and c.Size=@Size and c.FSM=@FSM " +
-                $"and c.Term=@Term";
+                $"c.AssessmentArea=@AssesmentArea " +
+                $"and (is_null(c.OverallPhase) or c.OverallPhase=@OverallPhase) " +
+                $"and (is_null(c.HasSixthForm) or c.HasSixthForm=@HasSixthForm) " +
+                $"and (is_null(c.FinancialType) or c.FinancialType=@FinancialType) " +
+                $"and (is_null(c.LondonWeighting) or contains(c.LondonWeighting, @LondonWeighting)) " +
+                $"and (is_null(c.Size) or c.Size=@Size) " +
+                $"and (is_null(c.FSM) or c.FSM=@FSM) " +
+                $"and (is_null(c.Term) or c.Term=@Term)";
 
             var queryDefinition = new QueryDefinition(queryString)
                 .WithParameter($"@AssesmentArea", assesmentArea)
@@ -99,7 +104,14 @@ namespace SFB.Web.Infrastructure.Repositories
             var results = new List<SADSchoolRatingsDataObject>();
             while (query.HasMoreResults)
             {
-                var response = await query.ReadNextAsync();
+                FeedResponse<SADSchoolRatingsDataObject> response;
+                try
+                {
+                    response = await query.ReadNextAsync();
+                }catch(Exception ex)
+                {
+                    throw ex;
+                }
 
                 results.AddRange(response.ToList());
             }
