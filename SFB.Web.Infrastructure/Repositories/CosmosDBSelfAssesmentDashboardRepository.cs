@@ -75,7 +75,7 @@ namespace SFB.Web.Infrastructure.Repositories
 
         public async Task<List<SADSchoolRatingsDataObject>> GetSADSchoolRatingsDataObjectsAsync(string assesmentArea, EstablishmentType financialType, string overallPhase, bool hasSixthForm, string londonWeighting, string size, string FSM, string term)
         {
-            var container = _client.GetContainer(_databaseId, "SADSchoolRatingsPerAssesmentArea");
+            var container = _client.GetContainer(_databaseId, "SADSchoolRatingsPerAssessmentArea");
 
             var queryString = $"SELECT * FROM c WHERE " +
                 $"c.AssessmentArea=@AssesmentArea "+
