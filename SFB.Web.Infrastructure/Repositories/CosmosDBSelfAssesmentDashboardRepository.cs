@@ -75,7 +75,7 @@ namespace SFB.Web.Infrastructure.Repositories
             return result;
         }
 
-        public async Task<List<SADSchoolRatingsDataObject>> GetSADSchoolRatingsDataObjectsAsync(string assesmentArea, EstablishmentType financialType, string overallPhase, bool hasSixthForm, string londonWeighting, string size, string FSM, string term)
+        public async Task<List<SADSchoolRatingsDataObject>> GetSADSchoolRatingsDataObjectsAsync(string assesmentArea, string overallPhase, bool hasSixthForm, string londonWeighting, string size, string FSM, string term)
         {
             var container = _client.GetContainer(_databaseId, "SADSchoolRatingsPerAssessmentArea");
 
@@ -83,7 +83,6 @@ namespace SFB.Web.Infrastructure.Repositories
                 $"c.AssessmentArea=@AssesmentArea " +
                 $"and (is_null(c.OverallPhase) or c.OverallPhase=@OverallPhase) " +
                 $"and (is_null(c.HasSixthForm) or c.HasSixthForm=@HasSixthForm) " +
-                $"and (is_null(c.FinancialType) or c.FinancialType=@FinancialType) " +
                 $"and (is_null(c.LondonWeighting) or contains(c.LondonWeighting, @LondonWeighting)) " +
                 $"and (is_null(c.Size) or c.Size=@Size) " +
                 $"and (is_null(c.FSM) or c.FSM=@FSM) " +
@@ -93,7 +92,6 @@ namespace SFB.Web.Infrastructure.Repositories
                 .WithParameter($"@AssesmentArea", assesmentArea)
                 .WithParameter($"@OverallPhase", overallPhase)
                 .WithParameter($"@HasSixthForm", hasSixthForm)
-                .WithParameter($"@FinancialType", financialType.ToString())
                 .WithParameter($"@Size", size)
                 .WithParameter($"@FSM", FSM)
                 .WithParameter($"@LondonWeighting", londonWeighting)
