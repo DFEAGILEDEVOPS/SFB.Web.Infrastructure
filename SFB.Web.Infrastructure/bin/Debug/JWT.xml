@@ -91,7 +91,7 @@
         </member>
         <member name="P:JWT.Algorithms.IJwtAlgorithm.IsAsymmetric">
             <summary>
-            Indicates whether algorithm is asymmetric.
+            Indicates whether algorithm is asymmetric or not.
             </summary>
         </member>
         <member name="T:JWT.Algorithms.RS256Algorithm">
@@ -149,9 +149,8 @@
         </member>
         <member name="M:JWT.Builder.EnumExtensions.GetDescription(System.Object)">
             <summary>
-            Gets the value of the Describtion Attribute from the object.
+            Gets the value of the <see cref="T:System.ComponentModel.DescriptionAttribute" /> from the object.
             </summary>
-            <param name="value">An object that is decorated with <see cref="T:System.ComponentModel.DescriptionAttribute"/></param>
         </member>
         <member name="T:JWT.Builder.HeaderName">
             <summary>
@@ -257,7 +256,16 @@
             Sets certificate secret.
             </summary>
             <remarks>
-            Required to create new token that uses an asymmetric algorithm such as <seealso cref="T:JWT.Algorithms.RS256Algorithm" />
+            Required to create new token that uses an symmetric algorithm such as <seealso cref="T:JWT.Algorithms.RS256Algorithm" />
+            </remarks>
+            <returns>Current builder instance</returns>
+        </member>
+        <member name="M:JWT.Builder.JwtBuilder.WithSecret(System.Byte[][])">
+            <summary>
+            Sets certificate secret.
+            </summary>
+            <remarks>
+            Required to create new token that uses an symmetric algorithm such as <seealso cref="T:JWT.Algorithms.RS256Algorithm" />
             </remarks>
             <returns>Current builder instance</returns>
         </member>

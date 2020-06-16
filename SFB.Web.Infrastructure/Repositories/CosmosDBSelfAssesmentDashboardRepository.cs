@@ -2,12 +2,10 @@
 using Microsoft.Azure.Cosmos.Fluent;
 using SFB.Web.ApplicationCore.DataAccess;
 using SFB.Web.ApplicationCore.Entities;
-using SFB.Web.ApplicationCore.Helpers.Enums;
 using SFB.Web.Infrastructure.Logging;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -54,6 +52,35 @@ namespace SFB.Web.Infrastructure.Repositories
             return result;
         }
 
+        public async Task<List<SADSizeLookupDataObject>> GetSADSizeLookupListDataObject()
+        {
+            var container = _client.GetContainer(_databaseId, "SADSizeLookup");
+
+            var queryString = $"SELECT * FROM c";
+
+            var queryDefinition = new QueryDefinition(queryString);
+
+            var query = container.GetItemQueryIterator<SADSizeLookupDataObject>(queryDefinition, null);
+
+            var results = new List<SADSizeLookupDataObject>();
+            while (query.HasMoreResults)
+            {
+                FeedResponse<SADSizeLookupDataObject> response;
+                try
+                {
+                    response = await query.ReadNextAsync();
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+
+                results.AddRange(response.ToList());
+            }
+
+            return results;
+        }
+
         public async Task<SADFSMLookupDataObject> GetSADFSMLookupDataObjectAsync(string overallPhase, bool hasSixthForm, decimal fsm, string term)
         {
             var container = _client.GetContainer(_databaseId, "SADFSMLookup");
@@ -74,6 +101,36 @@ namespace SFB.Web.Infrastructure.Repositories
 
             return result;
         }
+
+        public async Task<List<SADFSMLookupDataObject>> GetSADFSMLookupListDataObject()
+        {
+            var container = _client.GetContainer(_databaseId, "SADFSMLookup");
+
+            var queryString = $"SELECT * FROM c";
+
+            var queryDefinition = new QueryDefinition(queryString);
+
+            var query = container.GetItemQueryIterator<SADFSMLookupDataObject>(queryDefinition, null);
+
+            var results = new List<SADFSMLookupDataObject>();
+            while (query.HasMoreResults)
+            {
+                FeedResponse<SADFSMLookupDataObject> response;
+                try
+                {
+                    response = await query.ReadNextAsync();
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+
+                results.AddRange(response.ToList());
+            }
+
+            return results;
+        }
+
 
         public async Task<List<SADSchoolRatingsDataObject>> GetSADSchoolRatingsDataObjectsAsync(string assesmentArea, string overallPhase, bool hasSixthForm, string londonWeighting, string size, string FSM, string term)
         {
@@ -106,7 +163,8 @@ namespace SFB.Web.Infrastructure.Repositories
                 try
                 {
                     response = await query.ReadNextAsync();
-                }catch(Exception ex)
+                }
+                catch (Exception ex)
                 {
                     throw ex;
                 }
