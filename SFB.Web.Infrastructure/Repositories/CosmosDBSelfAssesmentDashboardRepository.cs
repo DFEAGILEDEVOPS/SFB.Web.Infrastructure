@@ -37,7 +37,7 @@ namespace SFB.Web.Infrastructure.Repositories
 
             var queryString = $"SELECT * FROM c WHERE " +
                 $"c.OverallPhase=@OverallPhase and (is_null(c.HasSixthForm) or c.HasSixthForm=@HasSixthForm) " +
-                $"and c.NoPupilsMin <= @NoPupils and c.NoPupilsMax >= @NoPupils " +
+                $"and c.NoPupilsMin <= @NoPupils and (is_null(c.NoPupilsMax) or c.NoPupilsMax >= @NoPupils) " +
                 $"and c.Term=@Term";
 
             var queryDefinition = new QueryDefinition(queryString)
