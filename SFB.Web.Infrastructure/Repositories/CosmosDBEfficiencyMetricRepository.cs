@@ -21,9 +21,9 @@ namespace SFB.Web.Infrastructure.Repositories
 
             _client = clientBuilder.WithConnectionModeDirect().Build();
 
-            _databaseId = _databaseId = ConfigurationManager.AppSettings["database"];
+            _databaseId = ConfigurationManager.AppSettings["database"];
 
-            _databaseId = _databaseId = ConfigurationManager.AppSettings["emCollection"];
+            _collectionId = ConfigurationManager.AppSettings["emCollection"];
         }
 
         public CosmosDBEfficiencyMetricRepository(CosmosClient cosmosClient, string databaseId, string collectionId, ILogManager logManager) : base(logManager)
