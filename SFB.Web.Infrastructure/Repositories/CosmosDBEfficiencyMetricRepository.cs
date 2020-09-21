@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace SFB.Web.Infrastructure.Repositories
 {
-    public class EfficiencyMetricRepository : AppInsightsLoggable, IEfficiencyMetricRepository
+    public class CosmosDBEfficiencyMetricRepository : AppInsightsLoggable, IEfficiencyMetricRepository
     {
         private readonly string _databaseId;
         private static CosmosClient _client;
 
-        public EfficiencyMetricRepository(ILogManager logManager) : base(logManager)
+        public CosmosDBEfficiencyMetricRepository(ILogManager logManager) : base(logManager)
         {
             var clientBuilder = new CosmosClientBuilder(ConfigurationManager.AppSettings["endpoint"], ConfigurationManager.AppSettings["authKey"]);
 
@@ -23,7 +23,7 @@ namespace SFB.Web.Infrastructure.Repositories
             _databaseId = _databaseId = ConfigurationManager.AppSettings["database"];
         }
 
-        public EfficiencyMetricRepository(CosmosClient cosmosClient, string databaseId, ILogManager logManager) : base(logManager)
+        public CosmosDBEfficiencyMetricRepository(CosmosClient cosmosClient, string databaseId, ILogManager logManager) : base(logManager)
         {
             _client = cosmosClient;
             _databaseId = databaseId;
