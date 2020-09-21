@@ -12,6 +12,7 @@ namespace SFB.Web.Infrastructure.Repositories
     public class CosmosDBEfficiencyMetricRepository : AppInsightsLoggable, IEfficiencyMetricRepository
     {
         private readonly string _databaseId;
+        private readonly string _collectionId;
         private static CosmosClient _client;
 
         public CosmosDBEfficiencyMetricRepository(ILogManager logManager) : base(logManager)
@@ -21,17 +22,20 @@ namespace SFB.Web.Infrastructure.Repositories
             _client = clientBuilder.WithConnectionModeDirect().Build();
 
             _databaseId = _databaseId = ConfigurationManager.AppSettings["database"];
+
+            _databaseId = _databaseId = ConfigurationManager.AppSettings["emCollection"];
         }
 
-        public CosmosDBEfficiencyMetricRepository(CosmosClient cosmosClient, string databaseId, ILogManager logManager) : base(logManager)
+        public CosmosDBEfficiencyMetricRepository(CosmosClient cosmosClient, string databaseId, string collectionId, ILogManager logManager) : base(logManager)
         {
             _client = cosmosClient;
             _databaseId = databaseId;
+            _collectionId = collectionId;
         }
 
         public async Task<EfficiencyMetricParentDataObject> GetEfficiencyMetricDataObjectByUrnAsync(int urn)
         {
-            var container = _client.GetContainer(_databaseId, "EmData");
+            var container = _client.GetContainer(_databaseId, _collectionId);
 
             var queryString = $"SELECT * FROM c WHERE c.Urn=@URN";
 
