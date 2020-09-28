@@ -46,7 +46,7 @@ namespace SFB.Web.Infrastructure.Repositories
             return (await feedIterator.ReadNextAsync()).First();            
         }
 
-        public async Task<bool> GetStatusByUrnAsync(int urn)
+        public bool GetStatusByUrnAsync(int urn)
         {
             var container = _client.GetContainer(_databaseId, _collectionId);
 
@@ -56,9 +56,7 @@ namespace SFB.Web.Infrastructure.Repositories
                 .WithParameter($"@URN", urn);
 
             var feedIterator = container.GetItemQueryIterator<object>(queryDefinition, null);
-            var result = (await feedIterator.ReadNextAsync()).First();
-
-            return result != null;
+            return feedIterator.HasMoreResults;            
         }
     }
 }
