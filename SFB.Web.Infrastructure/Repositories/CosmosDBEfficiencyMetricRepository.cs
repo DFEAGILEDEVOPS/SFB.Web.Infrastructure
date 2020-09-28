@@ -46,7 +46,7 @@ namespace SFB.Web.Infrastructure.Repositories
             return (await feedIterator.ReadNextAsync()).First();            
         }
 
-        public bool GetStatusByUrnAsync(int urn)
+        public bool GetStatusByUrn(int urn)
         {
             var container = _client.GetContainer(_databaseId, _collectionId);
 
