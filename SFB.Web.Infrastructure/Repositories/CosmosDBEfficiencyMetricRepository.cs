@@ -45,5 +45,20 @@ namespace SFB.Web.Infrastructure.Repositories
             var feedIterator = container.GetItemQueryIterator<EfficiencyMetricParentDataObject>(queryDefinition, null);
             return (await feedIterator.ReadNextAsync()).First();            
         }
+
+        public async Task<bool> GetStatusByUrnAsync(int urn)
+        {
+            var container = _client.GetContainer(_databaseId, _collectionId);
+
+            var queryString = $"SELECT c.Urn FROM c WHERE c.Urn=@URN";
+
+            var queryDefinition = new QueryDefinition(queryString)
+                .WithParameter($"@URN", urn);
+
+            var feedIterator = container.GetItemQueryIterator<object>(queryDefinition, null);
+            var result = (await feedIterator.ReadNextAsync()).First();
+
+            return result != null;
+        }
     }
 }
