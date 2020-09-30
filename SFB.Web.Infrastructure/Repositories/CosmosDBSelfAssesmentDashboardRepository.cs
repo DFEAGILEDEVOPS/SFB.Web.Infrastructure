@@ -134,7 +134,7 @@ namespace SFB.Web.Infrastructure.Repositories
 
         public async Task<List<SADSchoolRatingsDataObject>> GetSADSchoolRatingsDataObjectsAsync(string assesmentArea, string overallPhase, bool hasSixthForm, string londonWeighting, string size, string FSM, string term)
         {
-            var container = _client.GetContainer(_databaseId, "SADSchoolRatingsPerAssessmentAreaOptimized");
+            var container = _client.GetContainer(_databaseId, "SADSchoolRatings");
 
             var queryString = $"SELECT * FROM c WHERE " +
                 $"c.AssessmentArea=@AssesmentArea " +
@@ -143,7 +143,7 @@ namespace SFB.Web.Infrastructure.Repositories
                 $"and (is_null(c.LondonWeighting) or contains(c.LondonWeighting, @LondonWeighting)) " +
                 $"and (is_null(c.Size) or c.Size=@Size) " +
                 $"and (is_null(c.FSM) or c.FSM=@FSM) " +
-                $"and (is_null(c.Term) or c.Term=@Term)";
+                $"and c.Term<=@Term";
 
             var queryDefinition = new QueryDefinition(queryString)
                 .WithParameter($"@AssesmentArea", assesmentArea)
