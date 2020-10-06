@@ -3,6 +3,7 @@ using Microsoft.Azure.Cosmos.Fluent;
 using SFB.Web.ApplicationCore.DataAccess;
 using SFB.Web.ApplicationCore.Entities;
 using SFB.Web.Infrastructure.Logging;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,7 +34,7 @@ namespace SFB.Web.Infrastructure.Repositories
             _collectionId = collectionId;
         }
 
-        public async Task<EfficiencyMetricParentDataObject> GetEfficiencyMetricDataObjectByUrnAsync(int urn)
+        public async Task<List<EfficiencyMetricParentDataObject>> GetEfficiencyMetricDataObjectByUrnAsync(int urn)
         {
             var container = _client.GetContainer(_databaseId, _collectionId);
 
@@ -43,7 +44,15 @@ namespace SFB.Web.Infrastructure.Repositories
                 .WithParameter($"@URN", urn);
 
             var feedIterator = container.GetItemQueryIterator<EfficiencyMetricParentDataObject>(queryDefinition, null);
-            return (await feedIterator.ReadNextAsync()).First();            
+            List<EfficiencyMetricParentDataObject> results = new List<EfficiencyMetricParentDataObject>();
+            while (feedIterator.HasMoreResults)
+            {
+                var response = await feedIterator.ReadNextAsync();
+
+                results.AddRange(response.ToList());
+            }
+
+            return results;            
         }
 
         public async Task<bool> GetStatusByUrnAsync(int urn)
