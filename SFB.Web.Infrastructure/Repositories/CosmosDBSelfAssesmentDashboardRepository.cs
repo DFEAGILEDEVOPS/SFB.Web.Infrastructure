@@ -25,7 +25,7 @@ namespace SFB.Web.Infrastructure.Repositories
 
             _databaseId = _databaseId = ConfigurationManager.AppSettings["database"];
 
-            _collectionId = ConfigurationManager.AppSettings["emCollection"];
+            _collectionId = ConfigurationManager.AppSettings["sadCollection"];
         }
 
         public CosmosDBSelfAssesmentDashboardRepository(CosmosClient cosmosClient, string databaseId, string collectionId, ILogManager logManager) : base(logManager)
