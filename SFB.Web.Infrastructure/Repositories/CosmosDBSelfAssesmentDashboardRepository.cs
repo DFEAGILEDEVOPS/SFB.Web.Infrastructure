@@ -14,6 +14,7 @@ namespace SFB.Web.Infrastructure.Repositories
     public class CosmosDBSelfAssesmentDashboardRepository : AppInsightsLoggable, ISelfAssesmentDashboardRepository
     {
         private readonly string _databaseId;
+        private readonly string _collectionId;
         private static CosmosClient _client;
 
         public CosmosDBSelfAssesmentDashboardRepository(ILogManager logManager) : base(logManager)
@@ -23,12 +24,15 @@ namespace SFB.Web.Infrastructure.Repositories
             _client = clientBuilder.WithConnectionModeDirect().Build();
 
             _databaseId = _databaseId = ConfigurationManager.AppSettings["database"];
+
+            _collectionId = ConfigurationManager.AppSettings["emCollection"];
         }
 
-        public CosmosDBSelfAssesmentDashboardRepository(CosmosClient cosmosClient, string databaseId, ILogManager logManager) : base(logManager)
+        public CosmosDBSelfAssesmentDashboardRepository(CosmosClient cosmosClient, string databaseId, string collectionId, ILogManager logManager) : base(logManager)
         {
             _client = cosmosClient;
             _databaseId = databaseId;
+            _collectionId = collectionId;
         }
 
         async Task<SADSizeLookupDataObject> ISelfAssesmentDashboardRepository.GetSADSizeLookupDataObjectAsync(string overallPhase, bool hasSixthForm, decimal noPupils, string term)
@@ -134,7 +138,7 @@ namespace SFB.Web.Infrastructure.Repositories
 
         public async Task<List<SADSchoolRatingsDataObject>> GetSADSchoolRatingsDataObjectsAsync(string assesmentArea, string overallPhase, bool hasSixthForm, string londonWeighting, string size, string FSM, string term)
         {
-            var container = _client.GetContainer(_databaseId, "SADSchoolRatings");
+            var container = _client.GetContainer(_databaseId, _collectionId);
 
             var queryString = $"SELECT * FROM c WHERE " +
                 $"c.AssessmentArea=@AssesmentArea " +
