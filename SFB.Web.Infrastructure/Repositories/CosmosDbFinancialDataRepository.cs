@@ -439,7 +439,19 @@ namespace SFB.Web.Infrastructure.Repositories
                         $"c['{SchoolTrustFinanceDataFieldNames.KS2_PROGRESS}'], " +
                         $"c['{SchoolTrustFinanceDataFieldNames.PROGRESS_8_MEASURE}'], " +
                         $"c['{SchoolTrustFinanceDataFieldNames.PROGRESS_8_BANDING}'], " +
-                        $"c['{SchoolTrustFinanceDataFieldNames.TOTAL_EXP_PP}'] " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.TOTAL_EXP_PP}'], " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.AUTISTIC_DISORDER}'], " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.MODERATE_LEARNING_DIFFICULTY}'], " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.SPEECH_NEEDS}'], " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.SEVERE_LEARNING_DIFFICULTY}'], " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.PHYSICAL_DISABILITY}'], " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.SOCIAL_HEALTH}'], " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.OTHER_LEARNING_DIFF}'], " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.SPECIFIC_LEARNING_DIFFICULTY}'], " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.HEARING_IMPAIRMENT}'], " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.VISUAL_IMPAIRMENT}'], " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.MULTI_SENSORY_IMPAIRMENT}'], " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.PROF_LEARNING_DIFFICULTY}'] " +
                         $"FROM c WHERE {query}";
                 }
                 else
@@ -455,7 +467,19 @@ namespace SFB.Web.Infrastructure.Repositories
                         $"c['{SchoolTrustFinanceDataFieldNames.KS2_PROGRESS}'], " +
                         $"c['{SchoolTrustFinanceDataFieldNames.PROGRESS_8_MEASURE}'], " +
                         $"c['{SchoolTrustFinanceDataFieldNames.PROGRESS_8_BANDING}'], " +
-                        $"c['{SchoolTrustFinanceDataFieldNames.TOTAL_EXP_PP}'] " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.TOTAL_EXP_PP}'], " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.AUTISTIC_DISORDER}'], " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.MODERATE_LEARNING_DIFFICULTY}'], " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.SPEECH_NEEDS}'], " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.SEVERE_LEARNING_DIFFICULTY}'], " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.PHYSICAL_DISABILITY}'], " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.SOCIAL_HEALTH}'], " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.OTHER_LEARNING_DIFF}'], " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.SPECIFIC_LEARNING_DIFFICULTY}'], " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.HEARING_IMPAIRMENT}'], " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.VISUAL_IMPAIRMENT}'], " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.MULTI_SENSORY_IMPAIRMENT}'], " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.PROF_LEARNING_DIFFICULTY}'] " +
                         $"FROM c WHERE {query}";
                 }
 
