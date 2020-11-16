@@ -53,6 +53,20 @@ namespace SFB.Web.Infrastructure.SearchEngine
             return exactMatches;
         }
 
+        public async Task<SearchResultsModel<SchoolSearchResult>> SearchAcademiesByUIDAsync(int uid, int skip, int take, string orderby, NameValueCollection queryParams)
+        {
+            NameValueCollection parameters = new NameValueCollection();
+            if (queryParams != null)
+            {
+                parameters = new NameValueCollection(queryParams);
+            }
+            parameters.Add("financeType", "A");
+            //parameters.Add("EstablishmentStatusInLatestAcademicYear", "Open");
+            var facets = new[] { EdubaseDataFieldNames.OVERALL_PHASE, EdubaseDataFieldNames.OFSTED_RATING, EdubaseDataFieldNames.GENDER };
+            var exactMatches = await ExecuteSearchAsync($"{uid}", $"{EdubaseDataFieldNames.UID}", ConstructApiFilterParams(parameters), orderby, skip, take, facets);
+            return exactMatches;
+        }
+
         public async Task<SearchResultsModel<SchoolSearchResult>> SearchSchoolByLaCodeAsync(string laCode, int skip, int take, string orderby, NameValueCollection queryParams)
         {
             var facets = new[] { EdubaseDataFieldNames.TYPE_OF_ESTAB, EdubaseDataFieldNames.OVERALL_PHASE, EdubaseDataFieldNames.RELIGIOUS_CHARACTER, EdubaseDataFieldNames.OFSTED_RATING };
@@ -398,5 +412,6 @@ namespace SFB.Web.Infrastructure.SearchEngine
 
             return new SearchResultsModel<SchoolSearchResult>((int)results.Count, facetsModel, results.Results.Select(r => r.Document), take, skip);
         }
+
     }
 }
