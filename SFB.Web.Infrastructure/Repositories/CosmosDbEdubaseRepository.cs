@@ -155,6 +155,46 @@ namespace SFB.Web.Infrastructure.Repositories
             }
         }
 
+        public async Task<IEnumerable<EdubaseDataObject>> GetAcademiesByUidAsync(int uid)
+        {
+            var collectionName = await _dataCollectionManager.GetLatestActiveCollectionByDataGroupAsync(DataGroups.Edubase);
+
+            var container = _client.GetContainer(_databaseId, collectionName);
+
+            var results = new List<EdubaseDataObject>();
+
+            var queryString = $"SELECT c['{EdubaseDataFieldNames.URN}'], " +
+                $"c['{EdubaseDataFieldNames.ESTAB_NAME}'], " +
+                $"c['{EdubaseDataFieldNames.OVERALL_PHASE}'], " +
+                $"c['{EdubaseDataFieldNames.COMPANY_NUMBER}'] " +
+                $"FROM c WHERE c.{EdubaseDataFieldNames.UID}=@UID " +
+                $"AND c.{EdubaseDataFieldNames.FINANCE_TYPE} = 'A'";
+
+            var queryDefinition = new QueryDefinition(queryString)
+                .WithParameter($"@UID", uid);
+
+            try
+            {
+                var feedIterator = container.GetItemQueryIterator<EdubaseDataObject>(queryDefinition, null);
+
+                while (feedIterator.HasMoreResults)
+                {
+                    foreach (var item in await feedIterator.ReadNextAsync())
+                    {
+                        results.Add(item);
+                    }
+                }
+
+                return results;
+            }
+            catch (Exception ex)
+            {
+                var errorMessage = $"{collectionName} could not be loaded! : {ex.Message} : {queryDefinition.QueryText}";
+                base.LogException(ex, errorMessage);
+                return null;
+            }
+        }
+
         public async Task<int> GetAcademiesCountByCompanyNoAsync(int companyNo)
         {
             var collectionName = await _dataCollectionManager.GetLatestActiveCollectionByDataGroupAsync(DataGroups.Edubase);
