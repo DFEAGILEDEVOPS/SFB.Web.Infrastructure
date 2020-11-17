@@ -120,7 +120,7 @@ namespace SFB.Web.Infrastructure.Repositories
             }
         }
 
-        public async Task<List<AcademiesContextualDataObject>> GetAcademiesContextualDataObjectAsync(string term, int companyNo)
+        public async Task<List<AcademySummaryDataObject>> GetAcademiesContextualDataObjectAsync(string term, int companyNo)
         {
             var collectionName = (await _dataCollectionManager.GetActiveCollectionsByDataGroupAsync(DataGroups.Academies))
                     .SingleOrDefault(sod => sod.Split('-').Last() == term.Split(' ').Last());
@@ -138,9 +138,9 @@ namespace SFB.Web.Infrastructure.Repositories
 
             try
             {
-                var results = new List<AcademiesContextualDataObject>();
+                var results = new List<AcademySummaryDataObject>();
 
-                var feedIterator = container.GetItemQueryIterator<AcademiesContextualDataObject>(queryDefinition, null);
+                var feedIterator = container.GetItemQueryIterator<AcademySummaryDataObject>(queryDefinition, null);
 
                 while (feedIterator.HasMoreResults)
                 {
