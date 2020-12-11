@@ -42,7 +42,7 @@ namespace SFB.Web.Infrastructure.Repositories
             var queryString = $"SELECT * FROM c WHERE " +
                 $"c.OverallPhase=@OverallPhase and (is_null(c.HasSixthForm) or c.HasSixthForm=@HasSixthForm) " +
                 $"and c.NoPupilsMin <= @NoPupils and (is_null(c.NoPupilsMax) or c.NoPupilsMax >= @NoPupils) " +
-                $"and (is_null(c.Term) or c.Term=@Term)";
+                $"and c.Term=@Term";
 
             var queryDefinition = new QueryDefinition(queryString)
                 .WithParameter($"@OverallPhase", overallPhase)
@@ -92,7 +92,7 @@ namespace SFB.Web.Infrastructure.Repositories
             var queryString = $"SELECT * FROM c WHERE " +
                 $"c.OverallPhase=@OverallPhase and (is_null(c.HasSixthForm) or c.HasSixthForm=@HasSixthForm) " +
                 $"and c.FSMMin <= @FSM and c.FSMMax >= @FSM " +
-                $"and (is_null(c.Term) or c.Term=@Term)";
+                $"and c.Term=@Term";
 
             var queryDefinition = new QueryDefinition(queryString)
                 .WithParameter($"@OverallPhase", overallPhase)
