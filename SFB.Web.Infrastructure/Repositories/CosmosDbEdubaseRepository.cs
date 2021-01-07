@@ -30,7 +30,6 @@ namespace SFB.Web.Infrastructure.Repositories
 
             _databaseId = ConfigurationManager.AppSettings["database"];
 
-            _ = CreateUDFsAsync();
         }
 
         public CosmosDbEdubaseRepository(IDataCollectionManager dataCollectionManager, CosmosClient cosmosClient, string databaseId, ILogManager logManager) : base(logManager)
@@ -41,29 +40,6 @@ namespace SFB.Web.Infrastructure.Repositories
 
             _databaseId = databaseId;
 
-            _ = CreateUDFsAsync();
-        }
-
-        private async Task CreateUDFsAsync()
-        {
-            var collectionName = await _dataCollectionManager.GetLatestActiveCollectionByDataGroupAsync(DataGroups.Edubase);
-
-            var container = _client.GetContainer(_databaseId, collectionName);
-
-            await container.Scripts.CreateUserDefinedFunctionAsync(new UserDefinedFunctionProperties
-            {
-                Id = "PARSE_FINANCIAL_TYPE_CODE",
-                Body = @"function(code) {
-                    switch (code) {
-                       case 'A':
-                           return 'Academies';
-                       case 'M':
-                           return 'Maintained';
-                       default:
-                           return 'Maintained';
-                        }
-                    }"
-            });
         }
 
         public async Task<EdubaseDataObject> GetSchoolDataObjectByUrnAsync(int urn)
@@ -127,7 +103,7 @@ namespace SFB.Web.Infrastructure.Repositories
                 $"c['{EdubaseDataFieldNames.OVERALL_PHASE}'], " +
                 $"c['{EdubaseDataFieldNames.COMPANY_NUMBER}'] " +
                 $"FROM c WHERE c.{EdubaseDataFieldNames.COMPANY_NUMBER}=@CompanyNo " +
-                $"AND c.{EdubaseDataFieldNames.FINANCE_TYPE} = 'A' " +
+                $"AND c.{EdubaseDataFieldNames.FINANCE_TYPE} = 'Academies' " +
                 $"AND c.{EdubaseDataFieldNames.ESTAB_STATUS_IN_YEAR} = 'Open'";
 
             var queryDefinition = new QueryDefinition(queryString)
@@ -168,7 +144,7 @@ namespace SFB.Web.Infrastructure.Repositories
                 $"c['{EdubaseDataFieldNames.OVERALL_PHASE}'], " +
                 $"c['{EdubaseDataFieldNames.COMPANY_NUMBER}'] " +
                 $"FROM c WHERE c.{EdubaseDataFieldNames.UID}=@UID " +
-                $"AND c.{EdubaseDataFieldNames.FINANCE_TYPE} = 'A'";
+                $"AND c.{EdubaseDataFieldNames.FINANCE_TYPE} = 'Academies'";
 
             var queryDefinition = new QueryDefinition(queryString)
                 .WithParameter($"@UID", uid);
@@ -203,7 +179,7 @@ namespace SFB.Web.Infrastructure.Repositories
 
             var queryString = $"SELECT VALUE COUNT(c) " +
                 $"FROM c WHERE c.{EdubaseDataFieldNames.COMPANY_NUMBER}=@CompanyNo " +
-                $"AND c.{EdubaseDataFieldNames.FINANCE_TYPE} = 'A' " +
+                $"AND c.{EdubaseDataFieldNames.FINANCE_TYPE} = 'Academies' " +
                 $"AND c.{EdubaseDataFieldNames.ESTAB_STATUS_IN_YEAR} = 'Open'";
 
             var queryDefinition = new QueryDefinition(queryString)
@@ -248,8 +224,9 @@ namespace SFB.Web.Infrastructure.Repositories
                 $"c['{EdubaseDataFieldNames.HEAD_LAST_NAME}'], c['{EdubaseDataFieldNames.MAT_SAT}'], c['{EdubaseDataFieldNames.SPONSORS}']," +
                 $"c['{EdubaseDataFieldNames.HAS_NURSERY}'], c['{EdubaseDataFieldNames.OFFICIAL_6_FORM}'], c['{EdubaseDataFieldNames.SCHOOL_WEB_SITE}'], " +
                 $"c['{EdubaseDataFieldNames.OFSTED_RATING}'], c['{EdubaseDataFieldNames.OFSTE_LAST_INSP}'], " +
-                $"udf.PARSE_FINANCIAL_TYPE_CODE(c['{EdubaseDataFieldNames.FINANCE_TYPE}']) AS {EdubaseDataFieldNames.FINANCE_TYPE}, " +
-                $"c['{EdubaseDataFieldNames.OPEN_DATE}'], c['{EdubaseDataFieldNames.CLOSE_DATE}'] FROM c WHERE {where}";
+                $"c['{EdubaseDataFieldNames.FINANCE_TYPE}'], " +
+                $"c['{EdubaseDataFieldNames.OPEN_DATE}'], " +
+                $"c['{EdubaseDataFieldNames.CLOSE_DATE}'] FROM c WHERE {where}";
 
             var queryDefinition = new QueryDefinition(queryString);
             foreach (var field in fields)
@@ -310,7 +287,7 @@ namespace SFB.Web.Infrastructure.Repositories
                 $"c['{EdubaseDataFieldNames.RELIGIOUS_CHARACTER}'], " +
                 $"c['{EdubaseDataFieldNames.OFSTED_RATING}'], " +
                 $"c['{EdubaseDataFieldNames.LOCATION}'], "+
-                $"udf.PARSE_FINANCIAL_TYPE_CODE(c['{EdubaseDataFieldNames.FINANCE_TYPE}']) AS {EdubaseDataFieldNames.FINANCE_TYPE} " +
+                $"c['{EdubaseDataFieldNames.FINANCE_TYPE}'] " +
                 $"FROM c WHERE c.{fieldName} IN ({sb.ToString().TrimEnd(',')})";
 
             var results = new List<EdubaseDataObject>();

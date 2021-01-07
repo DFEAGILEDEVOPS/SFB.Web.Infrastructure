@@ -257,7 +257,7 @@ namespace SFB.Web.Infrastructure.SearchEngine
 
             if (parameters["searchtype"] != null && (parameters["searchtype"] == "search-by-trust-location" || parameters["searchtype"] == "search-by-trust-la-code-name"))
             {
-                queryFilter.Add($"{EdubaseDataFieldNames.FINANCE_TYPE} eq 'A'");
+                queryFilter.Add($"{EdubaseDataFieldNames.FINANCE_TYPE} eq 'Academies'");
                 queryFilter.Add($"{EdubaseDataFieldNames.COMPANY_NUMBER} ne null and {EdubaseDataFieldNames.COMPANY_NUMBER} ne '0'");
                 queryFilter.Add($"{EdubaseDataFieldNames.ESTAB_STATUS} eq 'Open' or {EdubaseDataFieldNames.ESTAB_STATUS} eq 'Open, but proposed to close'");
             }
