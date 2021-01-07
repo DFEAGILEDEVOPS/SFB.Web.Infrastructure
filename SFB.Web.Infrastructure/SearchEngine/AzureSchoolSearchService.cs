@@ -284,7 +284,7 @@ namespace SFB.Web.Infrastructure.SearchEngine
                 queryFilter.Add(string.Join(" or ", values.Select(x => $"{EdubaseDataFieldNames.TYPE_OF_ESTAB} eq '" + x + "'")));
             }
 
-            if (parameters["ofstedrating"] != null)
+            if (parameters["ofstedrating"] != null) 
             {
                 string[] values = ExtractValues(parameters["ofstedrating"]);
                 values = values.Select(x => x == "6" ? "" : x).ToArray();
