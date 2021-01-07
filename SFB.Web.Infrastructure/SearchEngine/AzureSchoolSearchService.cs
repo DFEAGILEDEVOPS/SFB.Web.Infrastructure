@@ -46,7 +46,7 @@ namespace SFB.Web.Infrastructure.SearchEngine
             {
                 parameters = new NameValueCollection(queryParams);
             }
-            parameters.Add("financeType", "A");
+            parameters.Add("financeType", "Academies");
             parameters.Add("EstablishmentStatusInLatestAcademicYear", "Open");
             var facets = new[] { EdubaseDataFieldNames.OVERALL_PHASE, EdubaseDataFieldNames.OFSTED_RATING, EdubaseDataFieldNames.GENDER };
             var exactMatches = await ExecuteSearchAsync($"{companyNo}", $"{EdubaseDataFieldNames.COMPANY_NUMBER}", ConstructApiFilterParams(parameters), orderby, skip, take, facets);
@@ -60,7 +60,7 @@ namespace SFB.Web.Infrastructure.SearchEngine
             {
                 parameters = new NameValueCollection(queryParams);
             }
-            parameters.Add("financeType", "A");
+            parameters.Add("financeType", "Academies");
             //parameters.Add("EstablishmentStatusInLatestAcademicYear", "Open");
             var facets = new[] { EdubaseDataFieldNames.OVERALL_PHASE, EdubaseDataFieldNames.OFSTED_RATING, EdubaseDataFieldNames.GENDER };
             var exactMatches = await ExecuteSearchAsync($"{uid}", $"{EdubaseDataFieldNames.UID}", ConstructApiFilterParams(parameters), orderby, skip, take, facets);
