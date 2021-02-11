@@ -217,7 +217,7 @@ namespace SFB.Web.Infrastructure.Repositories
             var queryString =
                 $"SELECT c['{EdubaseDataFieldNames.URN}'], c['{EdubaseDataFieldNames.UID}'], c['{EdubaseDataFieldNames.ESTAB_NAME}'], " +
                 $"c['{EdubaseDataFieldNames.OVERALL_PHASE}'], c['{EdubaseDataFieldNames.PHASE_OF_EDUCATION}'], c['{EdubaseDataFieldNames.TYPE_OF_ESTAB}'], " +
-                $"c['{EdubaseDataFieldNames.STREET}'], c['{EdubaseDataFieldNames.TOWN}'], c['{EdubaseDataFieldNames.LOCATION}'], c['{EdubaseDataFieldNames.POSTCODE}'], " +
+                $"c['{EdubaseDataFieldNames.ADDRESS}'], c['{EdubaseDataFieldNames.LOCATION}'], " +
                 $"c['{EdubaseDataFieldNames.TRUSTS}'], c['{EdubaseDataFieldNames.COMPANY_NUMBER}'], " +
                 $"c['{EdubaseDataFieldNames.LA_CODE}'], c['{EdubaseDataFieldNames.ESTAB_NO}'], c['{EdubaseDataFieldNames.TEL_NO}'], c['{EdubaseDataFieldNames.NO_PUPIL}'], " +
                 $"c['{EdubaseDataFieldNames.STAT_LOW}'], c['{EdubaseDataFieldNames.STAT_HIGH}'], c['{EdubaseDataFieldNames.HEAD_FIRST_NAME}'], " +
@@ -276,9 +276,7 @@ namespace SFB.Web.Infrastructure.Repositories
                 $"c['{EdubaseDataFieldNames.ESTAB_NAME}'], " +
                 $"c['{EdubaseDataFieldNames.OVERALL_PHASE}'], " +
                 $"c['{EdubaseDataFieldNames.TYPE_OF_ESTAB}'], " +
-                $"c['{EdubaseDataFieldNames.STREET}'], " +
-                $"c['{EdubaseDataFieldNames.TOWN}'], " +
-                $"c['{EdubaseDataFieldNames.POSTCODE}'], " +
+                $"c['{EdubaseDataFieldNames.ADDRESS}'], " +
                 $"c['{EdubaseDataFieldNames.TEL_NO}'], " +
                 $"c['{EdubaseDataFieldNames.HEAD_FIRST_NAME}'], " +
                 $"c['{EdubaseDataFieldNames.HEAD_LAST_NAME}'], " +
