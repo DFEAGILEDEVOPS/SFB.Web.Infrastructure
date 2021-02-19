@@ -633,12 +633,12 @@ namespace SFB.Web.Infrastructure.Repositories
 
             query = ExcludeSAMATs(query);
 
+            var queryString = $"SELECT VALUE COUNT(c) FROM c WHERE {query}";
+
             if (string.IsNullOrEmpty(query))
             {
-                return 0;
+                queryString = $"SELECT VALUE COUNT(c) FROM c";
             }
-
-            var queryString = $"SELECT VALUE COUNT(c) FROM c WHERE {query}";
 
             var queryDefinition = new QueryDefinition(queryString);
 
