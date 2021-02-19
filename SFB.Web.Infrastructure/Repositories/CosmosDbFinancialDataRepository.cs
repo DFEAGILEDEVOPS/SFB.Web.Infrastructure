@@ -629,15 +629,19 @@ namespace SFB.Web.Infrastructure.Repositories
 
             var container = _client.GetContainer(_databaseId, collectionName);
 
-            var query = BuildQueryFromBenchmarkCriteria(criteria);
+            string queryString;
 
-            query = ExcludeSAMATs(query);
-
-            var queryString = $"SELECT VALUE COUNT(c) FROM c WHERE {query}";
-
-            if (string.IsNullOrEmpty(query))
+            if (criteria == null)
             {
-                queryString = $"SELECT VALUE COUNT(c) FROM c";
+                queryString = $"SELECT VALUE COUNT(c) FROM c WHERE c.{SchoolTrustFinanceDataFieldNames.MEMBER_COUNT} > 1";
+            }
+            else
+            {
+                var query = BuildQueryFromBenchmarkCriteria(criteria);
+
+                query = ExcludeSAMATs(query);
+
+                queryString = $"SELECT VALUE COUNT(c) FROM c WHERE {query}";
             }
 
             var queryDefinition = new QueryDefinition(queryString);
