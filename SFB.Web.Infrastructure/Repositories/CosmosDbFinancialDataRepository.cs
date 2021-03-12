@@ -452,9 +452,9 @@ namespace SFB.Web.Infrastructure.Repositories
                 query = ExcludePartials(query);
             }
 
-#if DEBUG
-                System.Diagnostics.Debug.WriteLine(query, "Query");
-#endif
+//#if DEBUG
+//                System.Diagnostics.Debug.WriteLine(query, "Query");
+//#endif
 
             if (string.IsNullOrEmpty(query))
             {
