@@ -161,6 +161,49 @@ namespace SFB.Web.Infrastructure.Repositories
             }
         }
 
+        public async Task<SchoolTrustFinancialDataObject> GetFederationFinancialDataObjectByFuidAsync(int fuid, string term)
+        {
+            var dataGroup = EstablishmentType.Federation.ToDataGroup();
+
+            var collectionName = await _dataCollectionManager.GetCollectionIdByTermByDataGroupAsync(term, dataGroup);
+
+            if (collectionName == null)
+            {
+                return null;
+            }
+
+            var container = _client.GetContainer(_databaseId, collectionName);
+
+            var queryString = $"SELECT * FROM c WHERE c['{SchoolTrustFinanceDataFieldNames.FEDERATION_UID}']=@fuid and c['{SchoolTrustFinanceDataFieldNames.IS_FEDERATION}']=true";
+
+            var queryDefinition = new QueryDefinition(queryString)
+                .WithParameter($"@fuid", fuid);
+
+            var feedIterator = container.GetItemQueryIterator<SchoolTrustFinancialDataObject>(queryDefinition, null);
+
+            try
+            {
+                var result = (await feedIterator.ReadNextAsync()).FirstOrDefault();
+
+                if (result != null && result.DidNotSubmit)
+                {
+                    var emptyObj = new SchoolTrustFinancialDataObject();
+                    emptyObj.DidNotSubmit = true;
+                    return emptyObj;
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                if (term.Contains(_dataCollectionManager.GetLatestFinancialDataYearPerEstabTypeAsync(EstablishmentType.MAT).ToString()))
+                {
+                    var errorMessage = $"{collectionName} could not be loaded! : {ex.Message} : {queryDefinition.QueryText}";
+                    base.LogException(ex, errorMessage);
+                }
+                return null;
+            }
+        }
+
         public async Task<SchoolTrustFinancialDataObject> GetTrustFinancialDataObjectByUidAsync(int uid, string term, MatFinancingType matFinance)
         {
             var dataGroup = EstablishmentType.MAT.ToDataGroup(matFinance);
@@ -741,7 +784,6 @@ namespace SFB.Web.Infrastructure.Repositories
             var query = queryBuilder.ToString();
             return string.IsNullOrEmpty(query) ? query : query.Substring(0, query.Length - 5);
         }
-
 
     }
 }

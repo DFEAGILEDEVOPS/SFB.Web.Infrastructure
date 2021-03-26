@@ -231,6 +231,7 @@ namespace SFB.Web.Infrastructure
             {
                 case EstablishmentType.Academies:
                     return DataGroups.Academies;
+                case EstablishmentType.Federation:
                 case EstablishmentType.Maintained:
                     return DataGroups.Maintained;
                 case EstablishmentType.MAT:
