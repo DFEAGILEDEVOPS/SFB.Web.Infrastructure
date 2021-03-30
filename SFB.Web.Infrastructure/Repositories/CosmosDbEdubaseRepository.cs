@@ -222,9 +222,11 @@ namespace SFB.Web.Infrastructure.Repositories
                 $"c['{EdubaseDataFieldNames.LA_CODE}'], c['{EdubaseDataFieldNames.ESTAB_NO}'], c['{EdubaseDataFieldNames.TEL_NO}'], c['{EdubaseDataFieldNames.NO_PUPIL}'], " +
                 $"c['{EdubaseDataFieldNames.STAT_LOW}'], c['{EdubaseDataFieldNames.STAT_HIGH}'], c['{EdubaseDataFieldNames.HEAD_FIRST_NAME}'], " +
                 $"c['{EdubaseDataFieldNames.HEAD_LAST_NAME}'], c['{EdubaseDataFieldNames.MAT_SAT}'], c['{EdubaseDataFieldNames.SPONSORS}']," +
-                $"c['{EdubaseDataFieldNames.HAS_NURSERY}'], c['{EdubaseDataFieldNames.OFFICIAL_6_FORM}'], c['{EdubaseDataFieldNames.SCHOOL_WEB_SITE}'], " +
+                $"c['{EdubaseDataFieldNames.NURSERY_PROVISION}'], c['{EdubaseDataFieldNames.OFFICIAL_6_FORM}'], c['{EdubaseDataFieldNames.SCHOOL_WEB_SITE}'], " +
                 $"c['{EdubaseDataFieldNames.OFSTED_RATING}'], c['{EdubaseDataFieldNames.OFSTE_LAST_INSP}'], " +
-                $"c['{EdubaseDataFieldNames.FINANCE_TYPE}'], " +
+                $"c['{EdubaseDataFieldNames.FINANCE_TYPE}'], c['{EdubaseDataFieldNames.IS_FEDERATION}'], c['{EdubaseDataFieldNames.IS_PART_OF_FEDERATION}'], " +
+                $"c['{EdubaseDataFieldNames.FEDERATION_UID}'], c['{EdubaseDataFieldNames.FEDERATION_NAME}'], c['{EdubaseDataFieldNames.FEDERATION_MEMBERS}'], " +
+                $"c['{EdubaseDataFieldNames.FEDERATIONS_CODE}'], c['{EdubaseDataFieldNames.FEDERATION}'], " +
                 $"c['{EdubaseDataFieldNames.OPEN_DATE}'], " +
                 $"c['{EdubaseDataFieldNames.CLOSE_DATE}'] FROM c WHERE {where}";
 
