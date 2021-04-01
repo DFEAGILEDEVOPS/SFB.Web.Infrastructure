@@ -484,7 +484,11 @@ namespace SFB.Web.Infrastructure.Repositories
             return result;
         }
 
-        private async Task<IEnumerable<SchoolTrustFinancialDataObject>> QueryDBSchoolCollectionAsync(BenchmarkCriteria criteria, string dataGroup, bool excludePartial = false)
+        private async Task<IEnumerable<SchoolTrustFinancialDataObject>> QueryDBSchoolCollectionAsync(
+            BenchmarkCriteria criteria, 
+            string dataGroup, 
+            bool excludePartial = false,
+            bool excludeFeds = true)
         {
             var collectionName = await _dataCollectionManager.GetLatestActiveCollectionIdByDataGroupAsync(dataGroup);
 
@@ -495,9 +499,14 @@ namespace SFB.Web.Infrastructure.Repositories
                 query = ExcludePartials(query);
             }
 
-//#if DEBUG
-//                System.Diagnostics.Debug.WriteLine(query, "Query");
-//#endif
+            if (excludeFeds)
+            {
+                query = ExcludeFeds(query);
+            }
+
+            //#if DEBUG
+            //                System.Diagnostics.Debug.WriteLine(query, "Query");
+            //#endif
 
             if (string.IsNullOrEmpty(query))
             {
@@ -639,7 +648,11 @@ namespace SFB.Web.Infrastructure.Repositories
             return resultList;
         }
 
-        private async Task<int> QueryDBSchoolCollectionForCountAsync(BenchmarkCriteria criteria, string type, bool excludePartial = false)
+        private async Task<int> QueryDBSchoolCollectionForCountAsync(
+            BenchmarkCriteria criteria, 
+            string type, 
+            bool excludePartial = false,
+            bool excludeFeds = true)
         {
             var collectionName = await _dataCollectionManager.GetLatestActiveCollectionIdByDataGroupAsync(type);
 
@@ -650,6 +663,11 @@ namespace SFB.Web.Infrastructure.Repositories
             if (excludePartial)
             {
                 query = ExcludePartials(query);
+            }
+
+            if (excludeFeds)
+            {
+                query = ExcludeFeds(query);
             }
 
             var queryString = $"SELECT VALUE COUNT(c) FROM c WHERE {query}";
@@ -706,6 +724,15 @@ namespace SFB.Web.Infrastructure.Repositories
                 return $"c['{SchoolTrustFinanceDataFieldNames.PERIOD_COVERED_BY_RETURN}'] = 12";
             }
             return $"{query} AND c['{SchoolTrustFinanceDataFieldNames.PERIOD_COVERED_BY_RETURN}'] = 12";
+        }
+
+        private string ExcludeFeds(string query)
+        {
+            if (string.IsNullOrEmpty(query))
+            {
+                return $"c['{SchoolTrustFinanceDataFieldNames.IS_FEDERATION}'] = false";
+            }
+            return $"{query} AND c['{SchoolTrustFinanceDataFieldNames.IS_FEDERATION}'] = false";
         }
 
         private string BuildQueryFromBenchmarkCriteria(BenchmarkCriteria criteria)
