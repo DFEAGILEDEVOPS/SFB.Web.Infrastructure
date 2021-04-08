@@ -730,9 +730,9 @@ namespace SFB.Web.Infrastructure.Repositories
         {
             if (string.IsNullOrEmpty(query))
             {
-                return $"c['{SchoolTrustFinanceDataFieldNames.IS_FEDERATION}'] = false";
+                return $"c['{SchoolTrustFinanceDataFieldNames.IS_FEDERATION}'] = false or not is_defined(c['{SchoolTrustFinanceDataFieldNames.IS_FEDERATION}'])";
             }
-            return $"{query} AND c['{SchoolTrustFinanceDataFieldNames.IS_FEDERATION}'] = false";
+            return $"{query} AND (c['{SchoolTrustFinanceDataFieldNames.IS_FEDERATION}'] = false or not is_defined(c['{SchoolTrustFinanceDataFieldNames.IS_FEDERATION}']))";
         }
 
         private string BuildQueryFromBenchmarkCriteria(BenchmarkCriteria criteria)
