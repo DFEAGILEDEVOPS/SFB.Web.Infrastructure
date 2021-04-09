@@ -414,12 +414,16 @@ namespace SFB.Web.Infrastructure.Repositories
         //    }
         //}
 
-        public async Task<List<SchoolTrustFinancialDataObject>> SearchSchoolsByCriteriaAsync(BenchmarkCriteria criteria, EstablishmentType estType, bool excludePartial = false)
+        public async Task<List<SchoolTrustFinancialDataObject>> SearchSchoolsByCriteriaAsync(
+            BenchmarkCriteria criteria, 
+            EstablishmentType estType, 
+            bool excludePartial = false,
+            bool excludeFeds = true)
         {
             if (estType == EstablishmentType.All)
             {
-                var maintainedSchoolsTask = QueryDBSchoolCollectionAsync(criteria, DataGroups.Maintained, excludePartial);
-                var academiesTask = QueryDBSchoolCollectionAsync(criteria, DataGroups.Academies, excludePartial);
+                var maintainedSchoolsTask = QueryDBSchoolCollectionAsync(criteria, DataGroups.Maintained, excludePartial, excludeFeds);
+                var academiesTask = QueryDBSchoolCollectionAsync(criteria, DataGroups.Academies, excludePartial, excludeFeds);
                 var maintainedSchools = (await maintainedSchoolsTask).ToList();
                 var academies = (await academiesTask).ToList();
                 maintainedSchools.AddRange(academies);
@@ -427,7 +431,7 @@ namespace SFB.Web.Infrastructure.Repositories
             }
             else
             {
-                return (await QueryDBSchoolCollectionAsync(criteria, estType.ToDataGroup(), excludePartial)).ToList();
+                return (await QueryDBSchoolCollectionAsync(criteria, estType.ToDataGroup(), excludePartial, excludeFeds)).ToList();
             }
         }
 
@@ -546,7 +550,8 @@ namespace SFB.Web.Infrastructure.Repositories
                         $"c['{SchoolTrustFinanceDataFieldNames.HEARING_IMPAIRMENT}'], " +
                         $"c['{SchoolTrustFinanceDataFieldNames.VISUAL_IMPAIRMENT}'], " +
                         $"c['{SchoolTrustFinanceDataFieldNames.MULTI_SENSORY_IMPAIRMENT}'], " +
-                        $"c['{SchoolTrustFinanceDataFieldNames.PROF_LEARNING_DIFFICULTY}'] " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.PROF_LEARNING_DIFFICULTY}'], " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.FEDERATION_NAME}'] " +
                         $"FROM c WHERE {query}";
                 }
                 else
@@ -574,7 +579,8 @@ namespace SFB.Web.Infrastructure.Repositories
                         $"c['{SchoolTrustFinanceDataFieldNames.HEARING_IMPAIRMENT}'], " +
                         $"c['{SchoolTrustFinanceDataFieldNames.VISUAL_IMPAIRMENT}'], " +
                         $"c['{SchoolTrustFinanceDataFieldNames.MULTI_SENSORY_IMPAIRMENT}'], " +
-                        $"c['{SchoolTrustFinanceDataFieldNames.PROF_LEARNING_DIFFICULTY}'] " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.PROF_LEARNING_DIFFICULTY}'], " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.FEDERATION_NAME}'] " +
                         $"FROM c WHERE {query}";
                 }
 
