@@ -550,8 +550,7 @@ namespace SFB.Web.Infrastructure.Repositories
                         $"c['{SchoolTrustFinanceDataFieldNames.HEARING_IMPAIRMENT}'], " +
                         $"c['{SchoolTrustFinanceDataFieldNames.VISUAL_IMPAIRMENT}'], " +
                         $"c['{SchoolTrustFinanceDataFieldNames.MULTI_SENSORY_IMPAIRMENT}'], " +
-                        $"c['{SchoolTrustFinanceDataFieldNames.PROF_LEARNING_DIFFICULTY}'], " +
-                        $"c['{SchoolTrustFinanceDataFieldNames.FEDERATION_NAME}'] " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.PROF_LEARNING_DIFFICULTY}'] " +
                         $"FROM c WHERE {query}";
                 }
                 else
@@ -580,6 +579,9 @@ namespace SFB.Web.Infrastructure.Repositories
                         $"c['{SchoolTrustFinanceDataFieldNames.VISUAL_IMPAIRMENT}'], " +
                         $"c['{SchoolTrustFinanceDataFieldNames.MULTI_SENSORY_IMPAIRMENT}'], " +
                         $"c['{SchoolTrustFinanceDataFieldNames.PROF_LEARNING_DIFFICULTY}'], " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.IS_FEDERATION}'], " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.IS_PART_OF_FEDERATION}'], " +
+                        $"c['{SchoolTrustFinanceDataFieldNames.FEDERATION_UID}'], " +
                         $"c['{SchoolTrustFinanceDataFieldNames.FEDERATION_NAME}'] " +
                         $"FROM c WHERE {query}";
                 }
