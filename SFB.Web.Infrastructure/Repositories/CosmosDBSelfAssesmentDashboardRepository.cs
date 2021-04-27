@@ -76,7 +76,7 @@ namespace SFB.Web.Infrastructure.Repositories
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw new ApplicationException("SAD Size lookup data could not be loaded!");
                 }
 
                 results.AddRange(response.ToList());
@@ -124,10 +124,10 @@ namespace SFB.Web.Infrastructure.Repositories
                 {
                     response = await query.ReadNextAsync();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    throw ex;
-                }
+                    throw new ApplicationException("SAD FSM lookup data could not be loaded!");
+                } 
 
                 results.AddRange(response.ToList());
             }
@@ -168,9 +168,9 @@ namespace SFB.Web.Infrastructure.Repositories
                 {
                     response = await query.ReadNextAsync();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    throw ex;
+                    throw new ApplicationException("SAD data could not be loaded!");
                 }
 
                 results.AddRange(response.ToList());

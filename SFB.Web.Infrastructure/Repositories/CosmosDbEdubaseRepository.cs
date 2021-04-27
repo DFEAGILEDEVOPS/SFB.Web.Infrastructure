@@ -45,6 +45,10 @@ namespace SFB.Web.Infrastructure.Repositories
         public async Task<EdubaseDataObject> GetSchoolDataObjectByUrnAsync(int urn)
         {
             var schoolDataObjects = await GetSchoolDataObjectByIdAsync(new Dictionary<string, object> { { SchoolTrustFinanceDataFieldNames.URN, urn } });
+            if(schoolDataObjects == null)
+            {
+                throw new ApplicationException("School data object could not be loaded from Edubase! URN:" + urn);
+            }
             return schoolDataObjects.FirstOrDefault();
         }
 

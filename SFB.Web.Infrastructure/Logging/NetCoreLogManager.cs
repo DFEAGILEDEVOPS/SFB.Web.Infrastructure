@@ -17,8 +17,8 @@ namespace SFB.Web.Infrastructure.Logging
 
         public void LogException(Exception exception, string errorMessage)
         {
-            if (exception is Newtonsoft.Json.JsonSerializationException || exception is Newtonsoft.Json.JsonReaderException)
-            {
+            //if (exception is Newtonsoft.Json.JsonSerializationException || exception is Newtonsoft.Json.JsonReaderException)
+            //{
                 if (_enableAiTelemetry != null && bool.Parse(_enableAiTelemetry))
                 {
                     var ai = new TelemetryClient();
@@ -37,7 +37,7 @@ namespace SFB.Web.Infrastructure.Logging
                         ai.TrackTrace($"TRUST BM COOKIE: {matBmCookie}");
                     }
                 }
-            }
+            //}
         }
     }
 }
