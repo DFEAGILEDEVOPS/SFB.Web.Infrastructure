@@ -44,7 +44,7 @@ namespace SFB.Web.Infrastructure.Repositories
             _databaseId = databaseId;
         }
 
-        public async Task<SchoolTrustFinancialDataObject> GetSchoolFinancialDataObjectAsync(int urn, string term, EstablishmentType estabType, CentralFinancingType cFinance)
+        public async Task<SchoolTrustFinancialDataObject> GetSchoolFinancialDataObjectAsync(long urn, string term, EstablishmentType estabType, CentralFinancingType cFinance)
         {
             var dataGroup = estabType.ToDataGroup(cFinance);
 
@@ -91,7 +91,7 @@ namespace SFB.Web.Infrastructure.Repositories
             }
         }
 
-        public async Task<SchoolTrustFinancialDataObject> GetSchoolFinanceDataObjectAsync(int urn, string term, EstablishmentType estabType, CentralFinancingType cFinance)
+        public async Task<SchoolTrustFinancialDataObject> GetSchoolFinanceDataObjectAsync(long urn, string term, EstablishmentType estabType, CentralFinancingType cFinance)
         {
             var dataGroup = estabType.ToDataGroup(cFinance);
 
@@ -161,7 +161,7 @@ namespace SFB.Web.Infrastructure.Repositories
             }
         }
 
-        public async Task<SchoolTrustFinancialDataObject> GetFederationFinancialDataObjectByFuidAsync(int fuid, string term)
+        public async Task<SchoolTrustFinancialDataObject> GetFederationFinancialDataObjectByFuidAsync(long fuid, string term)
         {
             var dataGroup = EstablishmentType.Federation.ToDataGroup();
 

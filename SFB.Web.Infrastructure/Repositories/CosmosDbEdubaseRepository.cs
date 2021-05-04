@@ -42,7 +42,7 @@ namespace SFB.Web.Infrastructure.Repositories
 
         }
 
-        public async Task<EdubaseDataObject> GetSchoolDataObjectByUrnAsync(int urn)
+        public async Task<EdubaseDataObject> GetSchoolDataObjectByUrnAsync(long urn)
         {
             var schoolDataObjects = await GetSchoolDataObjectByIdAsync(new Dictionary<string, object> { { SchoolTrustFinanceDataFieldNames.URN, urn } });
             if(schoolDataObjects == null)
@@ -52,7 +52,7 @@ namespace SFB.Web.Infrastructure.Repositories
             return schoolDataObjects.FirstOrDefault();
         }
 
-        public async Task<List<EdubaseDataObject>> GetMultipleSchoolDataObjectsByUrnsAsync(List<int> urns)
+        public async Task<List<EdubaseDataObject>> GetMultipleSchoolDataObjectsByUrnsAsync(List<long> urns)
         {
             return await GetMultipleSchoolDataObjectsByIdsAsync(SchoolTrustFinanceDataFieldNames.URN, urns);
         }
@@ -73,7 +73,7 @@ namespace SFB.Web.Infrastructure.Repositories
             return await GetSchoolDataObjectByIdAsync(parameters);
         }
 
-        public async Task<List<int>> GetAllSchoolUrnsAsync()
+        public async Task<List<long>> GetAllSchoolUrnsAsync()
         {
             var queryString = $"SELECT VALUE c.URN FROM c";
 
@@ -81,9 +81,9 @@ namespace SFB.Web.Infrastructure.Repositories
 
             var container = _client.GetContainer(_databaseId, collectionName);
             
-            var query = container.GetItemQueryIterator<int>(new QueryDefinition(queryString));
+            var query = container.GetItemQueryIterator<long>(new QueryDefinition(queryString));
 
-            List<int> results = new List<int>();
+            List<long> results = new List<long>();
             while (query.HasMoreResults)
             {
                 var response = await query.ReadNextAsync();
@@ -269,7 +269,7 @@ namespace SFB.Web.Infrastructure.Repositories
             }        
         }
 
-        private async Task<List<EdubaseDataObject>> GetMultipleSchoolDataObjectsByIdsAsync(string fieldName, List<int> ids)
+        private async Task<List<EdubaseDataObject>> GetMultipleSchoolDataObjectsByIdsAsync(string fieldName, List<long> ids)
         {
             var collectionName = await _dataCollectionManager.GetLatestActiveCollectionByDataGroupAsync(DataGroups.Edubase);
 

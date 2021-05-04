@@ -34,7 +34,7 @@ namespace SFB.Web.Infrastructure.Repositories
             _collectionId = collectionId;
         }
 
-        public async Task<List<EfficiencyMetricParentDataObject>> GetEfficiencyMetricDataObjectByUrnAsync(int urn)
+        public async Task<List<EfficiencyMetricParentDataObject>> GetEfficiencyMetricDataObjectByUrnAsync(long urn)
         {
             var container = _client.GetContainer(_databaseId, _collectionId);
 
@@ -55,7 +55,7 @@ namespace SFB.Web.Infrastructure.Repositories
             return results;            
         }
 
-        public async Task<bool> GetStatusByUrnAsync(int urn)
+        public async Task<bool> GetStatusByUrnAsync(long urn)
         {
             var container = _client.GetContainer(_databaseId, _collectionId);
 

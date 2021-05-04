@@ -74,7 +74,7 @@ namespace SFB.Web.Infrastructure.Repositories
                 {
                     response = await query.ReadNextAsync();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     throw new ApplicationException("SAD Size lookup data could not be loaded!");
                 }

@@ -39,13 +39,13 @@ namespace SFB.Web.Infrastructure.Caching
             }
         }
 
-        public async Task<List<int>> GetAllActiveUrnsAsync()
+        public async Task<List<long>> GetAllActiveUrnsAsync()
         {
             var cache = Connection.GetDatabase();
             
             var serializedList = cache.StringGet("SFBActiveURNList");
 
-            List<int> deserializedList;
+            List<long> deserializedList;
 
             if (serializedList.IsNull)
             {
@@ -55,7 +55,7 @@ namespace SFB.Web.Infrastructure.Caching
             }
             else
             {
-                deserializedList = JsonConvert.DeserializeObject<List<int>>(serializedList);
+                deserializedList = JsonConvert.DeserializeObject<List<long>>(serializedList);
             }
             
             return deserializedList;

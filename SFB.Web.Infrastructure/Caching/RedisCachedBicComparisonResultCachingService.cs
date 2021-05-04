@@ -24,7 +24,7 @@ namespace SFB.Web.Infrastructure.Caching
             }
         }
 
-        public ComparisonResult GetBicComparisonResultByUrn(int urn)
+        public ComparisonResult GetBicComparisonResultByUrn(long urn)
         {
             var cache = Connection.GetDatabase();
 
@@ -40,7 +40,7 @@ namespace SFB.Web.Infrastructure.Caching
             return deserializedList;
         }
 
-        public void StoreBicComparisonResultByUrn(int urn, ComparisonResult comparisonResult)
+        public void StoreBicComparisonResultByUrn(long urn, ComparisonResult comparisonResult)
         {
             var cache = Connection.GetDatabase();
 

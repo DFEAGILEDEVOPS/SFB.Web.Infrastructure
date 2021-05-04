@@ -13,7 +13,7 @@ namespace SFB.Web.ApplicationCore.Services.SptReport
             _apiRequest = apiRequest;
         }
 
-        public bool SptReportExists(int urn)
+        public bool SptReportExists(long urn)
         {
             return _apiRequest.Head("/estab-details/", new List<string> { urn.ToString() }).statusCode == HttpStatusCode.OK;
         }
