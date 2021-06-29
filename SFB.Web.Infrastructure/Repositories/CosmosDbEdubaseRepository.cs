@@ -222,7 +222,7 @@ namespace SFB.Web.Infrastructure.Repositories
                 $"SELECT c['{EdubaseDataFieldNames.URN}'], c['{EdubaseDataFieldNames.UID}'], c['{EdubaseDataFieldNames.ESTAB_NAME}'], " +
                 $"c['{EdubaseDataFieldNames.OVERALL_PHASE}'], c['{EdubaseDataFieldNames.PHASE_OF_EDUCATION}'], c['{EdubaseDataFieldNames.TYPE_OF_ESTAB}'], " +
                 $"c['{EdubaseDataFieldNames.ADDRESS}'], c['{EdubaseDataFieldNames.LOCATION}'], " +
-                $"c['{EdubaseDataFieldNames.GOV_OFFICE_REGION}'],  " +
+                $"c['{EdubaseDataFieldNames.GOV_OFFICE_REGION}'],  c['{EdubaseDataFieldNames.ESTAB_STATUS}']" +
                 $"c['{EdubaseDataFieldNames.TRUSTS}'], c['{EdubaseDataFieldNames.COMPANY_NUMBER}'], " +
                 $"c['{EdubaseDataFieldNames.LA_CODE}'], c['{EdubaseDataFieldNames.ESTAB_NO}'], c['{EdubaseDataFieldNames.TEL_NO}'], c['{EdubaseDataFieldNames.NO_PUPIL}'], " +
                 $"c['{EdubaseDataFieldNames.STAT_LOW}'], c['{EdubaseDataFieldNames.STAT_HIGH}'], c['{EdubaseDataFieldNames.HEAD_FIRST_NAME}'], " +
