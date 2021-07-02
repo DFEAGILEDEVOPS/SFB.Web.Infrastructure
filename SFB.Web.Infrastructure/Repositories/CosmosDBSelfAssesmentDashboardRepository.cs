@@ -14,7 +14,9 @@ namespace SFB.Web.Infrastructure.Repositories
     public class CosmosDBSelfAssesmentDashboardRepository : AppInsightsLoggable, ISelfAssesmentDashboardRepository
     {
         private readonly string _databaseId;
-        private readonly string _collectionId;
+        private readonly string _sadCollectionId;
+        private readonly string _sizeLookupCollectionId;
+        private readonly string _fsmLookupCollectionId;
         private static CosmosClient _client;
 
         public CosmosDBSelfAssesmentDashboardRepository(ILogManager logManager) : base(logManager)
@@ -25,19 +27,30 @@ namespace SFB.Web.Infrastructure.Repositories
 
             _databaseId = _databaseId = ConfigurationManager.AppSettings["database"];
 
-            _collectionId = ConfigurationManager.AppSettings["sadCollection"];
+            _sadCollectionId = ConfigurationManager.AppSettings["sadCollection"];
+            
+            _sizeLookupCollectionId = ConfigurationManager.AppSettings["sadSizeLookupCollection"];
+            
+            _fsmLookupCollectionId = ConfigurationManager.AppSettings["sadFSMLookupCollection"];
         }
 
-        public CosmosDBSelfAssesmentDashboardRepository(CosmosClient cosmosClient, string databaseId, string collectionId, ILogManager logManager) : base(logManager)
+        public CosmosDBSelfAssesmentDashboardRepository(CosmosClient cosmosClient, 
+            string databaseId, 
+            string sadCollectionId,
+            string sizeCollectionId,
+            string fsmCollectionId,
+            ILogManager logManager) : base(logManager)
         {
             _client = cosmosClient;
             _databaseId = databaseId;
-            _collectionId = collectionId;
+            _sadCollectionId = sadCollectionId;
+            _sizeLookupCollectionId = sizeCollectionId;
+            _fsmLookupCollectionId = fsmCollectionId;
         }
 
         async Task<SADSizeLookupDataObject> ISelfAssesmentDashboardRepository.GetSADSizeLookupDataObjectAsync(string overallPhase, bool hasSixthForm, decimal noPupils, string term)
         {
-            var container = _client.GetContainer(_databaseId, ConfigurationManager.AppSettings["sadSizeLookupCollection"]);
+            var container = _client.GetContainer(_databaseId, _sizeLookupCollectionId);
 
             var queryString = $"SELECT * FROM c WHERE " +
                 $"c.OverallPhase=@OverallPhase and (is_null(c.HasSixthForm) or c.HasSixthForm=@HasSixthForm) " +
@@ -58,7 +71,7 @@ namespace SFB.Web.Infrastructure.Repositories
 
         public async Task<List<SADSizeLookupDataObject>> GetSADSizeLookupListDataObject()
         {
-            var container = _client.GetContainer(_databaseId, ConfigurationManager.AppSettings["sadSizeLookupCollection"]);
+            var container = _client.GetContainer(_databaseId, _sizeLookupCollectionId);
 
             var queryString = $"SELECT * FROM c";
 
@@ -87,7 +100,7 @@ namespace SFB.Web.Infrastructure.Repositories
 
         public async Task<SADFSMLookupDataObject> GetSADFSMLookupDataObjectAsync(string overallPhase, bool hasSixthForm, decimal fsm, string term)
         {
-            var container = _client.GetContainer(_databaseId, ConfigurationManager.AppSettings["sadFSMLookupCollection"]);
+            var container = _client.GetContainer(_databaseId, _fsmLookupCollectionId);
 
             var queryString = $"SELECT * FROM c WHERE " +
                 $"c.OverallPhase=@OverallPhase and (is_null(c.HasSixthForm) or c.HasSixthForm=@HasSixthForm) " +
@@ -108,7 +121,7 @@ namespace SFB.Web.Infrastructure.Repositories
 
         public async Task<List<SADFSMLookupDataObject>> GetSADFSMLookupListDataObject()
         {
-            var container = _client.GetContainer(_databaseId, ConfigurationManager.AppSettings["sadSFSMLookupCollection"]);
+            var container = _client.GetContainer(_databaseId, _fsmLookupCollectionId);
 
             var queryString = $"SELECT * FROM c";
 
@@ -138,7 +151,7 @@ namespace SFB.Web.Infrastructure.Repositories
 
         public async Task<List<SADSchoolRatingsDataObject>> GetSADSchoolRatingsDataObjectsAsync(string assesmentArea, string overallPhase, bool hasSixthForm, string londonWeighting, string size, string FSM, string term)
         {
-            var container = _client.GetContainer(_databaseId, _collectionId);
+            var container = _client.GetContainer(_databaseId, _sadCollectionId);
 
             var queryString = $"SELECT * FROM c WHERE " +
                 $"c.AssessmentArea=@AssesmentArea " +
