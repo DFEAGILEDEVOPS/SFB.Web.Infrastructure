@@ -37,7 +37,7 @@ namespace SFB.Web.Infrastructure.Repositories
 
         async Task<SADSizeLookupDataObject> ISelfAssesmentDashboardRepository.GetSADSizeLookupDataObjectAsync(string overallPhase, bool hasSixthForm, decimal noPupils, string term)
         {
-            var container = _client.GetContainer(_databaseId, "SADSizeLookup");
+            var container = _client.GetContainer(_databaseId, ConfigurationManager.AppSettings["sadSizeLookupCollection"]);
 
             var queryString = $"SELECT * FROM c WHERE " +
                 $"c.OverallPhase=@OverallPhase and (is_null(c.HasSixthForm) or c.HasSixthForm=@HasSixthForm) " +
@@ -58,7 +58,7 @@ namespace SFB.Web.Infrastructure.Repositories
 
         public async Task<List<SADSizeLookupDataObject>> GetSADSizeLookupListDataObject()
         {
-            var container = _client.GetContainer(_databaseId, "SADSizeLookup");
+            var container = _client.GetContainer(_databaseId, ConfigurationManager.AppSettings["sadSizeLookupCollection"]);
 
             var queryString = $"SELECT * FROM c";
 
@@ -87,7 +87,7 @@ namespace SFB.Web.Infrastructure.Repositories
 
         public async Task<SADFSMLookupDataObject> GetSADFSMLookupDataObjectAsync(string overallPhase, bool hasSixthForm, decimal fsm, string term)
         {
-            var container = _client.GetContainer(_databaseId, "SADFSMLookup");
+            var container = _client.GetContainer(_databaseId, ConfigurationManager.AppSettings["sadFSMLookupCollection"]);
 
             var queryString = $"SELECT * FROM c WHERE " +
                 $"c.OverallPhase=@OverallPhase and (is_null(c.HasSixthForm) or c.HasSixthForm=@HasSixthForm) " +
@@ -108,7 +108,7 @@ namespace SFB.Web.Infrastructure.Repositories
 
         public async Task<List<SADFSMLookupDataObject>> GetSADFSMLookupListDataObject()
         {
-            var container = _client.GetContainer(_databaseId, "SADFSMLookup");
+            var container = _client.GetContainer(_databaseId, ConfigurationManager.AppSettings["sadSFSMLookupCollection"]);
 
             var queryString = $"SELECT * FROM c";
 
