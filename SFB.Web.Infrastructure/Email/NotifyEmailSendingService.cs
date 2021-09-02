@@ -8,14 +8,24 @@ namespace SFB.Web.Infrastructure.Email
 {
     public class NotifyEmailSendingService : IEmailSendingService
     {
-        public async Task<string> SendUserEmailAsync(string toAddress, Dictionary<string, dynamic> placeholders)
+        public async Task<string> SendDataQueryUserEmailAsync(string toAddress, Dictionary<string, dynamic> placeholders)
         {
             return await SendEmail(toAddress, ConfigurationManager.AppSettings["UserEmailTemplateId"], placeholders);
         }
 
-        public async Task<string> SendDfEEmailAsync(string toAddress, Dictionary<string, dynamic> placeholders)
+        public async Task<string> SendDataQueryDfEEmailAsync(string toAddress, Dictionary<string, dynamic> placeholders)
         {
             return await SendEmail(toAddress, ConfigurationManager.AppSettings["DfEEmailTemplateId"], placeholders);
+        }
+
+        public async Task<string> SendContactUsUserEmailAsync(string toAddress, Dictionary<string, dynamic> placeholders)
+        {
+            return await SendEmail(toAddress, ConfigurationManager.AppSettings["ContactUsUserEmailTemplateId"], placeholders);
+        }
+
+        public async Task<string> SendContactUsDfEEmailAsync(string toAddress, Dictionary<string, dynamic> placeholders)
+        {
+            return await SendEmail(toAddress, ConfigurationManager.AppSettings["ContactUsDfEEmailTemplateId"], placeholders);
         }
 
         public async Task<string> SendGetInvolvedEmailAsync(string toAddress, Dictionary<string, dynamic> placeholders)
