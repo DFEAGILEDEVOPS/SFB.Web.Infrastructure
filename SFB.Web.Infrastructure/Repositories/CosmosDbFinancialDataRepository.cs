@@ -722,7 +722,14 @@ namespace SFB.Web.Infrastructure.Repositories
 
         private string ExcludeSAMATs(string query)
         {
-            return $"{query} AND c.{SchoolTrustFinanceDataFieldNames.MEMBER_COUNT} > 1";
+            if (query == string.Empty)
+            {
+                return $"{query} c.{SchoolTrustFinanceDataFieldNames.MEMBER_COUNT} > 1";
+            }
+            else
+            {
+                return $"{query} AND c.{SchoolTrustFinanceDataFieldNames.MEMBER_COUNT} > 1";
+            }
         }
 
         private string ExcludePartials(string query)
