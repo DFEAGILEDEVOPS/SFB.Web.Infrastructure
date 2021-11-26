@@ -12,9 +12,10 @@ namespace SFB.Web.Infrastructure.Caching
     /// <summary>
     /// This class should be registered as singleton.    
     /// </summary>
-    public class RedisCachedActiveUrnsService : IActiveUrnsService
+    public class RedisCachedActiveUrnsService : IActiveEstablishmentsService
     {
         private readonly IContextDataService _contextDataService;
+        private readonly IFinancialDataService _financialDataService;
         private readonly ConnectionMultiplexer _connection;
 
         public RedisCachedActiveUrnsService(IContextDataService contextDataService, string connectionString)
@@ -63,10 +64,56 @@ namespace SFB.Web.Infrastructure.Caching
             return deserializedList;
         }
 
+        public async Task<List<int>> GetAllActiveCompanyNosAsync()
+        {
+            var cache = _connection.GetDatabase();
+
+            var serializedList = cache.StringGet("SFBActiveCompanyNoList");
+
+            List<int> deserializedList;
+
+            if (serializedList.IsNull)
+            {
+                deserializedList = await _financialDataService.GetAllTrustCompanyNosAsync();
+
+                cache.StringSet("SFBActiveCompanyNoList", JsonConvert.SerializeObject(deserializedList));
+            }
+            else
+            {
+                deserializedList = JsonConvert.DeserializeObject<List<int>>(serializedList);
+            }
+
+            return deserializedList;
+        }
+
+        public async Task<List<long>> GetAllActiveFuidsAsync()
+        {
+            var cache = _connection.GetDatabase();
+
+            var serializedList = cache.StringGet("SFBActiveFuidList");
+
+            List<long> deserializedList;
+
+            if (serializedList.IsNull)
+            {
+                deserializedList = await _contextDataService.GetAllFederationUidsAsync();
+
+                cache.StringSet("SFBActiveFuidList", JsonConvert.SerializeObject(deserializedList));
+            }
+            else
+            {
+                deserializedList = JsonConvert.DeserializeObject<List<long>>(serializedList);
+            }
+
+            return deserializedList;
+        }
+
         private void ClearCachedData()
         {
             var cache = _connection.GetDatabase();
             cache.KeyDelete("SFBActiveURNList");
+            cache.KeyDelete("SFBActiveCompanyNoList");
+            cache.KeyDelete("SFBActiveFuidList");
         }
     }
 }

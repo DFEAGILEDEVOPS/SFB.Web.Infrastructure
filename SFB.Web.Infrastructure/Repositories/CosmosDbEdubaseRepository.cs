@@ -94,6 +94,27 @@ namespace SFB.Web.Infrastructure.Repositories
             return results;
         }
 
+        public async Task<List<long>> GetAllFederationUids()
+        {
+            var queryString = $"SELECT VALUE c['{EdubaseDataFieldNames.FEDERATION_UID}'] FROM c WHERE c['{EdubaseDataFieldNames.IS_FEDERATION}'] = true";
+
+            var collectionName = await _dataCollectionManager.GetLatestActiveCollectionByDataGroupAsync(DataGroups.Edubase);
+
+            var container = _client.GetContainer(_databaseId, collectionName);
+
+            var query = container.GetItemQueryIterator<long>(new QueryDefinition(queryString));
+
+            List<long> results = new List<long>();
+            while (query.HasMoreResults)
+            {
+                var response = await query.ReadNextAsync();
+
+                results.AddRange(response.ToList());
+            }
+
+            return results;
+        }
+
         public async Task<IEnumerable<EdubaseDataObject>> GetAcademiesByCompanyNoAsync(int companyNo)
         {
             var collectionName = await _dataCollectionManager.GetLatestActiveCollectionByDataGroupAsync(DataGroups.Edubase);

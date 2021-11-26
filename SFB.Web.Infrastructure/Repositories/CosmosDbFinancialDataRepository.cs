@@ -827,5 +827,32 @@ namespace SFB.Web.Infrastructure.Repositories
             return string.IsNullOrEmpty(query) ? query : query.Substring(0, query.Length - 5);
         }
 
+        public async Task<List<int>> GetAllTrustCompanyNos()
+        {
+            var dataGroup = EstablishmentType.MAT.ToDataGroup();
+
+            var collectionName = await _dataCollectionManager.GetLatestActiveCollectionByDataGroupAsync(dataGroup);
+
+            if (collectionName == null)
+            {
+                return null;
+            }
+
+            var container = _client.GetContainer(_databaseId, collectionName);
+
+            var queryString = $"SELECT VALUE c['{SchoolTrustFinanceDataFieldNames.COMPANY_NUMBER}'] FROM c";
+
+            var query = container.GetItemQueryIterator<int>(new QueryDefinition(queryString));
+
+            List<int> results = new List<int>();
+            while (query.HasMoreResults)
+            {
+                var response = await query.ReadNextAsync();
+
+                results.AddRange(response.ToList());
+            }
+
+            return results;
+        }
     }
 }
