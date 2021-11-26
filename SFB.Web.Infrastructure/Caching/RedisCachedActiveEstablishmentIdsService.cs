@@ -2,9 +2,7 @@
 using SFB.Web.ApplicationCore.Services;
 using SFB.Web.ApplicationCore.Services.DataAccess;
 using StackExchange.Redis;
-using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Threading.Tasks;
 
 namespace SFB.Web.Infrastructure.Caching
@@ -12,15 +10,16 @@ namespace SFB.Web.Infrastructure.Caching
     /// <summary>
     /// This class should be registered as singleton.    
     /// </summary>
-    public class RedisCachedActiveUrnsService : IActiveEstablishmentsService
+    public class RedisCachedActiveEstablishmentIdsService : IActiveEstablishmentsService
     {
         private readonly IContextDataService _contextDataService;
         private readonly IFinancialDataService _financialDataService;
         private readonly ConnectionMultiplexer _connection;
 
-        public RedisCachedActiveUrnsService(IContextDataService contextDataService, string connectionString)
+        public RedisCachedActiveEstablishmentIdsService(IContextDataService contextDataService, IFinancialDataService financialDataService, string connectionString)
         {
             _contextDataService = contextDataService;
+            _financialDataService = financialDataService;
             _connection = ConnectionMultiplexer.Connect(connectionString);
 
             //#if !DEBUG

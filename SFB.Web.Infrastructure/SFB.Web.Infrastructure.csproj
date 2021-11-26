@@ -273,7 +273,7 @@
     <Compile Include="Caching\AspNetCachedActiveCollectionsService.cs" />
     <Compile Include="Caching\AspNetCachedLocalAuthoritiesService.cs" />
     <Compile Include="Caching\NetCoreCachedActiveCollectionsService.cs" />
-    <Compile Include="Caching\RedisCachedActiveUrnsService.cs" />
+    <Compile Include="Caching\RedisCachedActiveEstablishmentIdsService.cs" />
     <Compile Include="Caching\RedisCachedBicComparisonResultCachingService.cs" />
     <Compile Include="Logging\AspNetLogManager.cs" />
     <Compile Include="Logging\ILogManager.cs" />
