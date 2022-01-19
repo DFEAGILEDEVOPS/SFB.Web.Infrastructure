@@ -1,11 +1,10 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using Newtonsoft.Json.Linq;
-using SFB.Web.ApplicationCore.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Caching;
+using Newtonsoft.Json.Linq;
+using SFB.Web.ApplicationCore.Services;
 
-namespace SFB.Web.Api
+namespace SFB.Web.Infrastructure.Caching
 {
     public class NetCoreCachedActiveCollectionsService : IActiveCollectionsService
     {

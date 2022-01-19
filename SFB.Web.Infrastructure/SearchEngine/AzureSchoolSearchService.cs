@@ -223,24 +223,6 @@ namespace SFB.Web.Infrastructure.SearchEngine
             return results;
         }
 
-        private static IEnumerable<SchoolSearchResult> CalcDistance(
-            IEnumerable<SchoolSearchResult> results,
-            string lat,
-            string lng)
-        {            
-            foreach (var result in results)
-            {
-                    var location = result.Location;
-                    if (location != null)
-                    {                        
-                        result.DistanceInMeters = GeoCodeCalc.CalcDistance(location.Latitude.ToString(), location.Longitude.ToString(), lat, lng);
-                    }
-                
-            }
-
-            return results;
-        }
-
         private bool AliasFound(string query, string alias)
         {
             return query != null && (query.StartsWith(alias) || query.Contains(" " + alias));

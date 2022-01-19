@@ -2,7 +2,8 @@
 using SFB.Web.ApplicationCore.Models;
 using SFB.Web.ApplicationCore.Services;
 using System.Collections.Generic;
-using System.Web.Configuration;
+using Microsoft.Extensions.Configuration;
+using System.Configuration;
 
 namespace SFB.Web.UI.Services
 {
@@ -11,12 +12,18 @@ namespace SFB.Web.UI.Services
         private const string AzureGeocodingUrl = "https://atlas.microsoft.com";
 
         private const string AzureGeoCodingQUeryFormat = "/search/address/json?api-version=1.0&query={0}&typeahead=true&limit=50&countrySet=GB&subscription-key={1}";
+
+        public AzureMapsLocationSearchService()
+        {
+
+        }
         
         public SuggestionQueryResult SuggestLocationName(string query)
         {
             var client = new RestClient(AzureGeocodingUrl);
-
-            var request = new RestRequest(string.Format(AzureGeoCodingQUeryFormat, query, WebConfigurationManager.AppSettings["AzureMapsAPIKey"]));
+             var azureMapsApiKey = ConfigurationManager.AppSettings["AzureMapsAPIKey"];
+            //var request = new RestRequest(string.Format(AzureGeoCodingQUeryFormat, query, WebConfigurationManager.AppSettings["AzureMapsAPIKey"]));
+            var request = new RestRequest(string.Format(AzureGeoCodingQUeryFormat, query, azureMapsApiKey));
             var response = client.Execute(request);
 
             dynamic content = Newtonsoft.Json.JsonConvert.DeserializeObject(response.Content);
