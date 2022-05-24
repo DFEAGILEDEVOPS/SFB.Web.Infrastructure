@@ -8,7 +8,7 @@ using StackExchange.Redis;
 
 namespace SFB.Web.Infrastructure.Caching
 {
-    public class ExternalServiceLookup
+    public class ExternalServiceLookup : IExternalServiceLookup
     {
         private static HttpClient _client;
         
