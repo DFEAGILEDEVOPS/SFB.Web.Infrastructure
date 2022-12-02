@@ -44,6 +44,45 @@ namespace SFB.Web.Infrastructure.Repositories
             _databaseId = databaseId;
         }
 
+        public async Task<List<SchoolTrustFinancialDataObject>> GetTrustSchoolsFinancialDataAsync(int uid, string term)
+        {
+            var dataGroup = DataGroups.Academies;
+            var collectionName = await _dataCollectionManager.GetCollectionIdByTermByDataGroupAsync(term, dataGroup);
+            var container = _client.GetContainer(_databaseId, collectionName);
+
+            if (collectionName == null)
+            {
+                return null;
+            }
+            
+            var queryString = $"SELECT * FROM c WHERE c.{SchoolTrustFinanceDataFieldNames.UID}=@UID";
+            var queryDefinition = new QueryDefinition(queryString)
+                .WithParameter($"@UID", uid);
+
+            try
+            {
+                var results = new List<SchoolTrustFinancialDataObject>();
+                var feedIterator =
+                    container.GetItemQueryIterator<SchoolTrustFinancialDataObject>(queryDefinition, null);
+                while (feedIterator.HasMoreResults)
+                {
+                    foreach (var item in await feedIterator.ReadNextAsync())
+                    {
+                        results.Add(item);
+                    }
+                }
+
+                return results;
+            }
+            catch (Exception ex)
+            {
+                var errorMessage = $"{collectionName} could not be loaded! : {ex.Message} : {queryDefinition.QueryText}";
+                base.LogException(ex, errorMessage);
+
+                return null;
+            }
+        }
+        
         public async Task<SchoolTrustFinancialDataObject> GetSchoolFinancialDataObjectAsync(long urn, string term, EstablishmentType estabType, CentralFinancingType cFinance)
         {
             var dataGroup = estabType.ToDataGroup(cFinance);
