@@ -254,7 +254,6 @@ namespace SFB.Web.Infrastructure.Repositories
                 $"c['{EdubaseDataFieldNames.FEDERATION_UID}'], c['{EdubaseDataFieldNames.FEDERATION_NAME}'], c['{EdubaseDataFieldNames.FEDERATION_MEMBERS}'], " +
                 $"c['{EdubaseDataFieldNames.FEDERATIONS_CODE}'], c['{EdubaseDataFieldNames.FEDERATION}'], " +
                 $"c['{EdubaseDataFieldNames.OPEN_DATE}'], " +
-                $"c['{EdubaseDataFieldNames.FINANCE_TYPE}'], " +
                 $"c['{EdubaseDataFieldNames.CLOSE_DATE}'] FROM c WHERE {where}";
 
             var queryDefinition = new QueryDefinition(queryString);
