@@ -312,6 +312,7 @@ namespace SFB.Web.Infrastructure.Repositories
                 $"c['{EdubaseDataFieldNames.NO_PUPIL}'], " +
                 $"c['{EdubaseDataFieldNames.RELIGIOUS_CHARACTER}'], " +
                 $"c['{EdubaseDataFieldNames.OFSTED_RATING}'], " +
+                $"c['{EdubaseDataFieldNames.OFSTE_LAST_INSP}'], " +
                 $"c['{EdubaseDataFieldNames.LOCATION}'], "+
                 $"c['{EdubaseDataFieldNames.FINANCE_TYPE}'], c['{EdubaseDataFieldNames.IS_FEDERATION}'], c['{EdubaseDataFieldNames.IS_PART_OF_FEDERATION}'], " +
                 $"c['{EdubaseDataFieldNames.FEDERATION_UID}'], c['{EdubaseDataFieldNames.FEDERATION_NAME}'], c['{EdubaseDataFieldNames.FEDERATION_MEMBERS}'], " +
