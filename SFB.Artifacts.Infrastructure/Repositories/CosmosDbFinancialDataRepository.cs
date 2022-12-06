@@ -46,7 +46,7 @@ namespace SFB.Web.Infrastructure.Repositories
 
         public async Task<List<SchoolTrustFinancialDataObject>> GetTrustSchoolsFinancialDataAsync(int uid, string term)
         {
-            var dataGroup = DataGroups.Academies;
+            var dataGroup = DataGroups.MATAllocs;
             var collectionName = await _dataCollectionManager.GetCollectionIdByTermByDataGroupAsync(term, dataGroup);
             var container = _client.GetContainer(_databaseId, collectionName);
 
