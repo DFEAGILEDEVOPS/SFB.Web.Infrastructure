@@ -16,6 +16,7 @@ namespace SFB.Web.Infrastructure.ApiWrappers
         string _username;
         string _password;
 
+
         public ApiRequest(string baseUrl) : this(baseUrl, string.Empty, string.Empty) {}
         
         public ApiRequest(string baseUrl, string userName, string password)
