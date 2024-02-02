@@ -13,6 +13,7 @@ using SFB.Web.ApplicationCore.Helpers.Constants;
 using SFB.Web.ApplicationCore.Models;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Fluent;
+using SFB.Artifacts.Infrastructure.Helpers;
 using SFB.Web.Infrastructure.Logging;
 
 namespace SFB.Web.Infrastructure.Repositories
@@ -30,7 +31,9 @@ namespace SFB.Web.Infrastructure.Repositories
             var clientBuilder = new CosmosClientBuilder(ConfigurationManager.AppSettings["endpoint"],
                 ConfigurationManager.AppSettings["authKey"]);
 
-            _client = clientBuilder.WithConnectionModeDirect().Build();
+            _client = ConfigurationManager.AppSettings[AppSettings.DisableCosmosConnectionModeDirect] == bool.TrueString
+                ? clientBuilder.Build() 
+                : clientBuilder.WithConnectionModeDirect().Build();
 
             _databaseId = ConfigurationManager.AppSettings["database"];
         }

@@ -7,6 +7,7 @@ using SFB.Web.Infrastructure.Logging;
 using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
+using SFB.Artifacts.Infrastructure.Helpers;
 
 
 namespace SFB.Web.Infrastructure.Repositories
@@ -21,7 +22,9 @@ namespace SFB.Web.Infrastructure.Repositories
         {
             var clientBuilder = new CosmosClientBuilder(ConfigurationManager.AppSettings["endpoint"], ConfigurationManager.AppSettings["authKey"]);
 
-            _client = clientBuilder.WithConnectionModeDirect().Build();
+            _client = ConfigurationManager.AppSettings[AppSettings.DisableCosmosConnectionModeDirect] == bool.TrueString
+                ? clientBuilder.Build() 
+                : clientBuilder.WithConnectionModeDirect().Build();
 
             _databaseId = _databaseId = ConfigurationManager.AppSettings["database"];
 
