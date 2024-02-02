@@ -28,8 +28,10 @@ namespace SFB.Web.Infrastructure.Helpers
             var clientBuilder = new CosmosClientBuilder(ConfigurationManager.AppSettings["endpoint"],
                 ConfigurationManager.AppSettings["authKey"]);
 
-            _client = ConfigurationManager.AppSettings[AppSettings.DisableCosmosConnectionModeDirect] == bool.TrueString 
-                ? clientBuilder.Build() 
+            _client = AppSettings.CosmosConnectionMode.Gateway.Equals(
+                ConfigurationManager.AppSettings[AppSettings.CosmosConnectionMode.Key],
+                StringComparison.OrdinalIgnoreCase)
+                ? clientBuilder.WithConnectionModeGateway().Build()
                 : clientBuilder.WithConnectionModeDirect().Build();
 
             _databaseId = ConfigurationManager.AppSettings["database"];
