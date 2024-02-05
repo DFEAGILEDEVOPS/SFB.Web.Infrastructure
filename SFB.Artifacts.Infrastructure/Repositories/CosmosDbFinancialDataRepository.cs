@@ -539,7 +539,7 @@ namespace SFB.Web.Infrastructure.Repositories
             bool excludeFeds = true)
         {
             var collectionName = await _dataCollectionManager.GetLatestActiveCollectionIdByDataGroupAsync(dataGroup);
-
+            
             var query = BuildQueryFromBenchmarkCriteria(criteria);
 
             if(excludePartial)
@@ -631,6 +631,13 @@ namespace SFB.Web.Infrastructure.Repositories
                 }
 
                 var queryDefinition = new QueryDefinition(queryString);
+
+                LogEvent("QueryDBSchoolCollectionAsync", new Dictionary<string, string>
+                {
+                    { "Container.DatabaseId", _databaseId },
+                    { "Container.ContainerId", container.Id },
+                    { "Container.Query", queryDefinition.QueryText }
+                });
 
                 var feedIterator = container.GetItemQueryIterator<SchoolTrustFinancialDataObject>(queryDefinition, null);
                  

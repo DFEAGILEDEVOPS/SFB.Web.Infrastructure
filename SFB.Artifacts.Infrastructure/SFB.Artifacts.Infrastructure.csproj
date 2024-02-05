@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -14,7 +14,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="RestSharp" Version="108.0.3" />
-    <PackageReference Include="SFB.Artifacts.ApplicationCore" Version="1.0.336.71556" />
+    <PackageReference Include="SFB.Artifacts.ApplicationCore" Version="1.0.036.79700" />
     <PackageReference Include="StackExchange.Redis" Version="2.2.88" />
     <PackageReference Include="System.Runtime.Caching" Version="6.0.0" />
   </ItemGroup>
