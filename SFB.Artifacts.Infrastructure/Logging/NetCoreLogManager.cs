@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.ApplicationInsights;
-using SFB.Web.ApplicationCore.Helpers.Constants;
 
 namespace SFB.Web.Infrastructure.Logging
 {
+    // ReSharper disable once UnusedType.Global
     public class NetCoreLogManager : ILogManager
     {
-        private string _enableAiTelemetry;
+        private readonly string _enableAiTelemetry;
+        
         public NetCoreLogManager(string enableAiTelemetry)
         {
             _enableAiTelemetry = enableAiTelemetry;
@@ -37,6 +39,20 @@ namespace SFB.Web.Infrastructure.Logging
                     //}
             }
             //}
+        }
+
+        public void LogEvent(string eventName, IDictionary<string, string> properties = null,
+            IDictionary<string, double> metrics = null)
+        {
+            if (_enableAiTelemetry == null || !bool.Parse(_enableAiTelemetry))
+            {
+                return;
+            }
+            
+#pragma warning disable CS0618 // Type or member is obsolete
+            var ai = new TelemetryClient();
+#pragma warning restore CS0618 // Type or member is obsolete
+            ai.TrackEvent(eventName, properties, metrics);
         }
     }
 }
