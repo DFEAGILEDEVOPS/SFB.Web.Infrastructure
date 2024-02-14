@@ -18,6 +18,7 @@ using SFB.Web.Infrastructure.Logging;
 
 namespace SFB.Web.Infrastructure.Repositories
 {
+    // ReSharper disable once UnusedType.Global
     public class CosmosDbFinancialDataRepository : AppInsightsLoggable, IFinancialDataRepository
     {
         private readonly string _databaseId;
@@ -63,6 +64,7 @@ namespace SFB.Web.Infrastructure.Repositories
             var queryString = $"SELECT * FROM c WHERE c.{SchoolTrustFinanceDataFieldNames.UID}=@UID";
             var queryDefinition = new QueryDefinition(queryString)
                 .WithParameter($"@UID", uid);
+            LogEvent("GetTrustSchoolsFinancialDataAsync", container.Id, queryDefinition.QueryText);
 
             try
             {
@@ -105,6 +107,7 @@ namespace SFB.Web.Infrastructure.Repositories
 
             var queryDefinition = new QueryDefinition(queryString)
                 .WithParameter($"@URN", urn);
+            LogEvent("GetSchoolFinancialDataObjectAsync", container.Id, queryDefinition.QueryText);
 
             try
             {
@@ -146,6 +149,7 @@ namespace SFB.Web.Infrastructure.Repositories
             var queryString = $"SELECT * FROM c WHERE c.{SchoolTrustFinanceDataFieldNames.URN}=@URN";
             var queryDefinition = new QueryDefinition(queryString)
                   .WithParameter($"@URN", urn);
+            LogEvent("GetSchoolFinanceDataObjectAsync", container.Id, queryDefinition.QueryText);
 
             try
             {
@@ -179,6 +183,7 @@ namespace SFB.Web.Infrastructure.Repositories
 
             var queryDefinition = new QueryDefinition(queryString)
                 .WithParameter($"@companyNo", companyNo);
+            LogEvent("GetAcademiesContextualDataObjectAsync", container.Id, queryDefinition.QueryText);
 
             try
             {
@@ -222,7 +227,8 @@ namespace SFB.Web.Infrastructure.Repositories
 
             var queryDefinition = new QueryDefinition(queryString)
                 .WithParameter($"@fuid", fuid);
-
+            LogEvent("GetFederationFinancialDataObjectByFuidAsync", container.Id, queryDefinition.QueryText);
+            
             var feedIterator = container.GetItemQueryIterator<SchoolTrustFinancialDataObject>(queryDefinition, null);
 
             try
@@ -265,6 +271,7 @@ namespace SFB.Web.Infrastructure.Repositories
 
             var queryDefinition = new QueryDefinition(queryString)
                 .WithParameter($"@uid", uid);
+            LogEvent("GetTrustFinancialDataObjectByUidAsync", container.Id, queryDefinition.QueryText);
 
             var feedIterator = container.GetItemQueryIterator<SchoolTrustFinancialDataObject>(queryDefinition, null);
 
@@ -308,6 +315,7 @@ namespace SFB.Web.Infrastructure.Repositories
 
             var queryDefinition = new QueryDefinition(queryString)
                 .WithParameter($"@companyNo", companyNo);
+            LogEvent("GetTrustFinancialDataObjectbyCompanyNoAsync", container.Id, queryDefinition.QueryText);
 
             var feedIterator = container.GetItemQueryIterator<SchoolTrustFinancialDataObject>(queryDefinition, null);
             
@@ -350,6 +358,7 @@ namespace SFB.Web.Infrastructure.Repositories
             var queryString = $"SELECT * FROM c WHERE c['{SchoolTrustFinanceDataFieldNames.COMPANY_NUMBER}'] in ({string.Join(",", companyNoList)})";
 
             var queryDefinition = new QueryDefinition(queryString);
+            LogEvent("GetMultipleTrustFinancialDataObjectsAsync", container.Id, queryDefinition.QueryText);
 
             var feedIterator = container.GetItemQueryIterator<SchoolTrustFinancialDataObject>(queryDefinition, null);
 
@@ -401,6 +410,7 @@ namespace SFB.Web.Infrastructure.Repositories
 
             var queryDefinition = new QueryDefinition(queryString)
                 .WithParameter($"@matName", matName);
+            LogEvent("GetTrustFinancialDataObjectByMatNameAsync", container.Id, queryDefinition.QueryText);
 
             var feedIterator = container.GetItemQueryIterator<SchoolTrustFinancialDataObject>(queryDefinition, null);
 
@@ -524,6 +534,7 @@ namespace SFB.Web.Infrastructure.Repositories
             var container = _client.GetContainer(_databaseId, collectionName);
 
             var queryDefinition = new QueryDefinition("SELECT VALUE COUNT(c) FROM c");
+            LogEvent("GetEstablishmentRecordCountAsync", container.Id, queryDefinition.QueryText);
 
             var feedIterator = container.GetItemQueryIterator<int>(queryDefinition, null);
 
@@ -631,13 +642,7 @@ namespace SFB.Web.Infrastructure.Repositories
                 }
 
                 var queryDefinition = new QueryDefinition(queryString);
-
-                LogEvent("QueryDBSchoolCollectionAsync", new Dictionary<string, string>
-                {
-                    { "Container.DatabaseId", _databaseId },
-                    { "Container.ContainerId", container.Id },
-                    { "Container.Query", queryDefinition.QueryText }
-                });
+                LogEvent("QueryDBSchoolCollectionAsync", container.Id, queryDefinition.QueryText);
 
                 var feedIterator = container.GetItemQueryIterator<SchoolTrustFinancialDataObject>(queryDefinition, null);
                  
@@ -685,6 +690,7 @@ namespace SFB.Web.Infrastructure.Repositories
                     $"FROM c WHERE {query}";
 
                 var queryDefinition = new QueryDefinition(queryString);
+                LogEvent("QueryDBTrustCollectionAsync", container.Id, queryDefinition.QueryText);
 
                 var feedIterator = container.GetItemQueryIterator<SchoolTrustFinancialDataObject>(queryDefinition, null);
 
@@ -737,6 +743,7 @@ namespace SFB.Web.Infrastructure.Repositories
             }            
 
             var queryDefinition = new QueryDefinition(queryString);
+            LogEvent("QueryDBSchoolCollectionForCountAsync", container.Id, queryDefinition.QueryText);
 
             var feedIterator = container.GetItemQueryIterator<int>(queryDefinition, null);
 
@@ -765,6 +772,7 @@ namespace SFB.Web.Infrastructure.Repositories
             }
 
             var queryDefinition = new QueryDefinition(queryString);
+            LogEvent("QueryDBTrustCollectionForCountAsync", container.Id, queryDefinition.QueryText);
 
             var feedIterator = container.GetItemQueryIterator<int>(queryDefinition, null);
 
@@ -893,7 +901,10 @@ namespace SFB.Web.Infrastructure.Repositories
 
             var queryString = $"SELECT VALUE c['{SchoolTrustFinanceDataFieldNames.COMPANY_NUMBER}'] FROM c";
 
-            var query = container.GetItemQueryIterator<int>(new QueryDefinition(queryString));
+            var queryDefinition = new QueryDefinition(queryString);
+            LogEvent("GetAllTrustCompanyNos", container.Id, queryDefinition.QueryText);
+
+            var query = container.GetItemQueryIterator<int>();
 
             List<int> results = new List<int>();
             while (query.HasMoreResults)
@@ -904,6 +915,16 @@ namespace SFB.Web.Infrastructure.Repositories
             }
 
             return results;
+        }
+
+        private void LogEvent(string eventName, string containerId, string query)
+        {
+            LogEvent(eventName, new Dictionary<string, string>
+            {
+                { "Container.DatabaseId", _databaseId },
+                { "Container.ContainerId", containerId },
+                { "Container.Query", query }
+            });
         }
     }
 }
