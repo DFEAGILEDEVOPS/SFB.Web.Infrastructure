@@ -13,6 +13,7 @@ using SFB.Web.ApplicationCore.Helpers.Constants;
 using SFB.Web.ApplicationCore.Models;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Fluent;
+using Newtonsoft.Json;
 using SFB.Artifacts.Infrastructure.Helpers;
 using SFB.Web.Infrastructure.Logging;
 
@@ -64,7 +65,7 @@ namespace SFB.Web.Infrastructure.Repositories
             var queryString = $"SELECT * FROM c WHERE c.{SchoolTrustFinanceDataFieldNames.UID}=@UID";
             var queryDefinition = new QueryDefinition(queryString)
                 .WithParameter($"@UID", uid);
-            LogEvent("GetTrustSchoolsFinancialDataAsync", container.Id, queryDefinition.QueryText);
+            LogEvent("GetTrustSchoolsFinancialDataAsync", container.Id, queryDefinition);
 
             try
             {
@@ -83,7 +84,7 @@ namespace SFB.Web.Infrastructure.Repositories
             }
             catch (Exception ex)
             {
-                var errorMessage = $"{collectionName} could not be loaded! : {ex.Message} : {queryDefinition.QueryText}";
+                var errorMessage = $"{collectionName} could not be loaded! : {ex.Message} : {queryDefinition}";
                 base.LogException(ex, errorMessage);
 
                 return null;
@@ -107,7 +108,7 @@ namespace SFB.Web.Infrastructure.Repositories
 
             var queryDefinition = new QueryDefinition(queryString)
                 .WithParameter($"@URN", urn);
-            LogEvent("GetSchoolFinancialDataObjectAsync", container.Id, queryDefinition.QueryText);
+            LogEvent("GetSchoolFinancialDataObjectAsync", container.Id, queryDefinition);
 
             try
             {
@@ -131,41 +132,56 @@ namespace SFB.Web.Infrastructure.Repositories
             {
                 if (term.Contains(_dataCollectionManager.GetLatestFinancialDataYearPerEstabTypeAsync(estabType).ToString()))
                 {
-                    var errorMessage = $"{collectionName} could not be loaded! : {ex.Message} : {queryDefinition.QueryText}";
+                    var errorMessage = $"{collectionName} could not be loaded! : {ex.Message} : {queryDefinition}";
                     base.LogException(ex, errorMessage);
                 }
                 return null;
             }
         }
 
-        public async Task<SchoolTrustFinancialDataObject> GetSchoolFinanceDataObjectAsync(long urn, string term, EstablishmentType estabType, CentralFinancingType cFinance)
+        public async Task<SchoolTrustFinancialDataObject> GetSchoolFinanceDataObjectAsync(long urn, string term,
+            EstablishmentType estabType, CentralFinancingType cFinance)
         {
             var dataGroup = estabType.ToDataGroup(cFinance);
-
-            string collectionName = await _dataCollectionManager.GetCollectionIdByTermByDataGroupAsync(term, dataGroup);
-
+            var collectionName = await _dataCollectionManager.GetCollectionIdByTermByDataGroupAsync(term, dataGroup);
             var container = _client.GetContainer(_databaseId, collectionName);
 
-            var queryString = $"SELECT * FROM c WHERE c.{SchoolTrustFinanceDataFieldNames.URN}=@URN";
+            var queryString = $"SELECT * FROM c WHERE c.{SchoolTrustFinanceDataFieldNames.URN} = @URN";
             var queryDefinition = new QueryDefinition(queryString)
-                  .WithParameter($"@URN", urn);
-            LogEvent("GetSchoolFinanceDataObjectAsync", container.Id, queryDefinition.QueryText);
+                .WithParameter($"@URN", urn);
+            LogEvent("GetSchoolFinanceDataObjectAsync", container.Id, queryDefinition);
 
             try
             {
-                var feedIterator = container.GetItemQueryIterator<SchoolTrustFinancialDataObject>(queryDefinition, null);
-                return (await feedIterator.ReadNextAsync()).FirstOrDefault();
-
+                using (var feedIterator =
+                       container.GetItemQueryIterator<SchoolTrustFinancialDataObject>(queryDefinition))
+                {
+                    while (feedIterator.HasMoreResults)
+                    {
+                        var response = await feedIterator.ReadNextAsync();
+                        return response.FirstOrDefault();
+                    }
+                }
             }
             catch (Exception ex)
             {
-                if (term.Contains(_dataCollectionManager.GetLatestFinancialDataYearPerEstabTypeAsync(estabType).ToString()))
+                var errorMessage = "Unable to parse document as `SchoolTrustFinancialDataObject`";
+                try
                 {
-                    var errorMessage = $"{collectionName} could not be loaded! : {ex.Message} : {queryDefinition.QueryText}";
-                    base.LogException(ex, errorMessage);
+                    if (term.Contains(
+                            (await _dataCollectionManager.GetLatestFinancialDataYearPerEstabTypeAsync(estabType))
+                            .ToString()))
+                    {
+                        errorMessage = $"{collectionName} could not be loaded! : {ex.Message} : {queryDefinition}";
+                    }
                 }
-                return null;
+                finally
+                {
+                    LogException(ex, errorMessage);
+                }
             }
+
+            return null;
         }
 
         public async Task<List<AcademySummaryDataObject>> GetAcademiesContextualDataObjectAsync(string term, int companyNo)
@@ -183,7 +199,7 @@ namespace SFB.Web.Infrastructure.Repositories
 
             var queryDefinition = new QueryDefinition(queryString)
                 .WithParameter($"@companyNo", companyNo);
-            LogEvent("GetAcademiesContextualDataObjectAsync", container.Id, queryDefinition.QueryText);
+            LogEvent("GetAcademiesContextualDataObjectAsync", container.Id, queryDefinition);
 
             try
             {
@@ -203,7 +219,7 @@ namespace SFB.Web.Infrastructure.Repositories
             }
             catch (Exception ex)
             {
-                var errorMessage = $"{collectionName} could not be loaded! : {ex.Message} : {queryDefinition.QueryText}";
+                var errorMessage = $"{collectionName} could not be loaded! : {ex.Message} : {queryDefinition}";
                 base.LogException(ex, errorMessage);
 
                 return null;
@@ -227,7 +243,7 @@ namespace SFB.Web.Infrastructure.Repositories
 
             var queryDefinition = new QueryDefinition(queryString)
                 .WithParameter($"@fuid", fuid);
-            LogEvent("GetFederationFinancialDataObjectByFuidAsync", container.Id, queryDefinition.QueryText);
+            LogEvent("GetFederationFinancialDataObjectByFuidAsync", container.Id, queryDefinition);
             
             var feedIterator = container.GetItemQueryIterator<SchoolTrustFinancialDataObject>(queryDefinition, null);
 
@@ -247,7 +263,7 @@ namespace SFB.Web.Infrastructure.Repositories
             {
                 if (term.Contains(_dataCollectionManager.GetLatestFinancialDataYearPerEstabTypeAsync(EstablishmentType.MAT).ToString()))
                 {
-                    var errorMessage = $"{collectionName} could not be loaded! : {ex.Message} : {queryDefinition.QueryText}";
+                    var errorMessage = $"{collectionName} could not be loaded! : {ex.Message} : {queryDefinition}";
                     base.LogException(ex, errorMessage);
                 }
                 return null;
@@ -271,7 +287,7 @@ namespace SFB.Web.Infrastructure.Repositories
 
             var queryDefinition = new QueryDefinition(queryString)
                 .WithParameter($"@uid", uid);
-            LogEvent("GetTrustFinancialDataObjectByUidAsync", container.Id, queryDefinition.QueryText);
+            LogEvent("GetTrustFinancialDataObjectByUidAsync", container.Id, queryDefinition);
 
             var feedIterator = container.GetItemQueryIterator<SchoolTrustFinancialDataObject>(queryDefinition, null);
 
@@ -291,7 +307,7 @@ namespace SFB.Web.Infrastructure.Repositories
             {
                 if (term.Contains(_dataCollectionManager.GetLatestFinancialDataYearPerEstabTypeAsync(EstablishmentType.MAT).ToString()))
                 {
-                    var errorMessage = $"{collectionName} could not be loaded! : {ex.Message} : {queryDefinition.QueryText}";
+                    var errorMessage = $"{collectionName} could not be loaded! : {ex.Message} : {queryDefinition}";
                     base.LogException(ex, errorMessage);
                 }
                 return null;
@@ -315,7 +331,7 @@ namespace SFB.Web.Infrastructure.Repositories
 
             var queryDefinition = new QueryDefinition(queryString)
                 .WithParameter($"@companyNo", companyNo);
-            LogEvent("GetTrustFinancialDataObjectbyCompanyNoAsync", container.Id, queryDefinition.QueryText);
+            LogEvent("GetTrustFinancialDataObjectbyCompanyNoAsync", container.Id, queryDefinition);
 
             var feedIterator = container.GetItemQueryIterator<SchoolTrustFinancialDataObject>(queryDefinition, null);
             
@@ -335,7 +351,7 @@ namespace SFB.Web.Infrastructure.Repositories
             {
                 if (term.Contains(_dataCollectionManager.GetLatestFinancialDataYearPerEstabTypeAsync(EstablishmentType.MAT).ToString()))
                 {
-                    var errorMessage = $"{collectionName} could not be loaded! : {ex.Message} : {queryDefinition.QueryText}";
+                    var errorMessage = $"{collectionName} could not be loaded! : {ex.Message} : {queryDefinition}";
                     base.LogException(ex, errorMessage);
                 }
                 return null;
@@ -358,7 +374,7 @@ namespace SFB.Web.Infrastructure.Repositories
             var queryString = $"SELECT * FROM c WHERE c['{SchoolTrustFinanceDataFieldNames.COMPANY_NUMBER}'] in ({string.Join(",", companyNoList)})";
 
             var queryDefinition = new QueryDefinition(queryString);
-            LogEvent("GetMultipleTrustFinancialDataObjectsAsync", container.Id, queryDefinition.QueryText);
+            LogEvent("GetMultipleTrustFinancialDataObjectsAsync", container.Id, queryDefinition);
 
             var feedIterator = container.GetItemQueryIterator<SchoolTrustFinancialDataObject>(queryDefinition, null);
 
@@ -410,7 +426,7 @@ namespace SFB.Web.Infrastructure.Repositories
 
             var queryDefinition = new QueryDefinition(queryString)
                 .WithParameter($"@matName", matName);
-            LogEvent("GetTrustFinancialDataObjectByMatNameAsync", container.Id, queryDefinition.QueryText);
+            LogEvent("GetTrustFinancialDataObjectByMatNameAsync", container.Id, queryDefinition);
 
             var feedIterator = container.GetItemQueryIterator<SchoolTrustFinancialDataObject>(queryDefinition, null);
 
@@ -430,7 +446,7 @@ namespace SFB.Web.Infrastructure.Repositories
             {
                 if (term.Contains(_dataCollectionManager.GetLatestFinancialDataYearPerEstabTypeAsync(EstablishmentType.MAT).ToString()))
                 {
-                    var errorMessage = $"{collectionName} could not be loaded! : {ex.Message} : {queryDefinition.QueryText}";
+                    var errorMessage = $"{collectionName} could not be loaded! : {ex.Message} : {queryDefinition}";
                     base.LogException(ex, errorMessage);
                 }
                 return null;
@@ -534,7 +550,7 @@ namespace SFB.Web.Infrastructure.Repositories
             var container = _client.GetContainer(_databaseId, collectionName);
 
             var queryDefinition = new QueryDefinition("SELECT VALUE COUNT(c) FROM c");
-            LogEvent("GetEstablishmentRecordCountAsync", container.Id, queryDefinition.QueryText);
+            LogEvent("GetEstablishmentRecordCountAsync", container.Id, queryDefinition);
 
             var feedIterator = container.GetItemQueryIterator<int>(queryDefinition, null);
 
@@ -642,7 +658,7 @@ namespace SFB.Web.Infrastructure.Repositories
                 }
 
                 var queryDefinition = new QueryDefinition(queryString);
-                LogEvent("QueryDBSchoolCollectionAsync", container.Id, queryDefinition.QueryText);
+                LogEvent("QueryDBSchoolCollectionAsync", container.Id, queryDefinition);
 
                 var feedIterator = container.GetItemQueryIterator<SchoolTrustFinancialDataObject>(queryDefinition, null);
                  
@@ -690,7 +706,7 @@ namespace SFB.Web.Infrastructure.Repositories
                     $"FROM c WHERE {query}";
 
                 var queryDefinition = new QueryDefinition(queryString);
-                LogEvent("QueryDBTrustCollectionAsync", container.Id, queryDefinition.QueryText);
+                LogEvent("QueryDBTrustCollectionAsync", container.Id, queryDefinition);
 
                 var feedIterator = container.GetItemQueryIterator<SchoolTrustFinancialDataObject>(queryDefinition, null);
 
@@ -743,7 +759,7 @@ namespace SFB.Web.Infrastructure.Repositories
             }            
 
             var queryDefinition = new QueryDefinition(queryString);
-            LogEvent("QueryDBSchoolCollectionForCountAsync", container.Id, queryDefinition.QueryText);
+            LogEvent("QueryDBSchoolCollectionForCountAsync", container.Id, queryDefinition);
 
             var feedIterator = container.GetItemQueryIterator<int>(queryDefinition, null);
 
@@ -772,7 +788,7 @@ namespace SFB.Web.Infrastructure.Repositories
             }
 
             var queryDefinition = new QueryDefinition(queryString);
-            LogEvent("QueryDBTrustCollectionForCountAsync", container.Id, queryDefinition.QueryText);
+            LogEvent("QueryDBTrustCollectionForCountAsync", container.Id, queryDefinition);
 
             var feedIterator = container.GetItemQueryIterator<int>(queryDefinition, null);
 
@@ -902,7 +918,7 @@ namespace SFB.Web.Infrastructure.Repositories
             var queryString = $"SELECT VALUE c['{SchoolTrustFinanceDataFieldNames.COMPANY_NUMBER}'] FROM c";
 
             var queryDefinition = new QueryDefinition(queryString);
-            LogEvent("GetAllTrustCompanyNos", container.Id, queryDefinition.QueryText);
+            LogEvent("GetAllTrustCompanyNos", container.Id, queryDefinition);
 
             var query = container.GetItemQueryIterator<int>();
 
@@ -917,13 +933,15 @@ namespace SFB.Web.Infrastructure.Repositories
             return results;
         }
 
-        private void LogEvent(string eventName, string containerId, string query)
+        private void LogEvent(string eventName, string containerId, QueryDefinition query)
         {
             LogEvent(eventName, new Dictionary<string, string>
             {
+                { "Repository", nameof(CosmosDbFinancialDataRepository) },
                 { "Container.DatabaseId", _databaseId },
                 { "Container.ContainerId", containerId },
-                { "Container.Query", query }
+                { "Container.Query", query.QueryText },
+                { "Container.Params", JsonConvert.SerializeObject(query.GetQueryParameters())  }
             });
         }
     }

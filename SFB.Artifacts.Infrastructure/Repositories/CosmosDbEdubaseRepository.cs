@@ -11,15 +11,17 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using SFB.Artifacts.Infrastructure.Helpers;
 
 namespace SFB.Web.Infrastructure.Repositories
 {
+    // ReSharper disable once UnusedType.Global
     public class CosmosDbEdubaseRepository : AppInsightsLoggable, IEdubaseRepository
     {
         private readonly string _databaseId;
         private static CosmosClient _client;
-        private IDataCollectionManager _dataCollectionManager;
+        private readonly IDataCollectionManager _dataCollectionManager;
 
         public CosmosDbEdubaseRepository(IDataCollectionManager dataCollectionManager, ILogManager logManager) : base(logManager)
         {
@@ -85,8 +87,10 @@ namespace SFB.Web.Infrastructure.Repositories
             var collectionName = await _dataCollectionManager.GetLatestActiveCollectionByDataGroupAsync(DataGroups.Edubase);
 
             var container = _client.GetContainer(_databaseId, collectionName);
-            
-            var query = container.GetItemQueryIterator<long>(new QueryDefinition(queryString));
+
+            var queryDefinition = new QueryDefinition(queryString);
+            var query = container.GetItemQueryIterator<long>();
+            LogEvent("GetAllSchoolUrnsAsync", container.Id, queryDefinition);
 
             List<long> results = new List<long>();
             while (query.HasMoreResults)
@@ -107,7 +111,9 @@ namespace SFB.Web.Infrastructure.Repositories
 
             var container = _client.GetContainer(_databaseId, collectionName);
 
-            var query = container.GetItemQueryIterator<long>(new QueryDefinition(queryString));
+            var queryDefinition = new QueryDefinition(queryString);
+            var query = container.GetItemQueryIterator<long>();
+            LogEvent("GetAllFederationUids", container.Id, queryDefinition);
 
             List<long> results = new List<long>();
             while (query.HasMoreResults)
@@ -138,6 +144,7 @@ namespace SFB.Web.Infrastructure.Repositories
 
             var queryDefinition = new QueryDefinition(queryString)
                 .WithParameter($"@CompanyNo", companyNo);
+            LogEvent("GetAcademiesByCompanyNoAsync", container.Id, queryDefinition);
 
             try
             {
@@ -178,6 +185,7 @@ namespace SFB.Web.Infrastructure.Repositories
 
             var queryDefinition = new QueryDefinition(queryString)
                 .WithParameter($"@UID", uid);
+            LogEvent("GetAcademiesByUidAsync", container.Id, queryDefinition);
 
             try
             {
@@ -214,6 +222,7 @@ namespace SFB.Web.Infrastructure.Repositories
 
             var queryDefinition = new QueryDefinition(queryString)
                 .WithParameter($"@CompanyNo", companyNo);
+            LogEvent("GetAcademiesCountByCompanyNoAsync", container.Id, queryDefinition);
 
             try
             {
@@ -266,7 +275,8 @@ namespace SFB.Web.Infrastructure.Repositories
             {
                 queryDefinition = queryDefinition.WithParameter($"@{field.Key}", field.Value);
             }
-
+            
+            LogEvent("GetSchoolDataObjectByIdAsync", container.Id, queryDefinition);
             var results = new List<EdubaseDataObject>();
 
             try
@@ -327,7 +337,10 @@ namespace SFB.Web.Infrastructure.Repositories
             var results = new List<EdubaseDataObject>();
             try
             {
-                var query = container.GetItemQueryIterator<EdubaseDataObject>(new QueryDefinition(queryString));
+                var queryDefinition = new QueryDefinition(queryString);
+                var query = container.GetItemQueryIterator<EdubaseDataObject>();
+                LogEvent("GetMultipleSchoolDataObjectsByIdsAsync", container.Id, queryDefinition);
+
                 while (query.HasMoreResults)
                 {
                     var response = await query.ReadNextAsync();
@@ -346,6 +359,18 @@ namespace SFB.Web.Infrastructure.Repositories
                 base.LogException(ex, errorMessage);
                 throw new ApplicationException($"One or more documents could not be loaded from {collectionName} : URNs = {sb.ToString().TrimEnd(',')}");
             }
+        }
+        
+        private void LogEvent(string eventName, string containerId, QueryDefinition query)
+        {
+            LogEvent(eventName, new Dictionary<string, string>
+            {
+                { "Repository", nameof(CosmosDbEdubaseRepository) },
+                { "Container.DatabaseId", _databaseId },
+                { "Container.ContainerId", containerId },
+                { "Container.Query", query.QueryText },
+                { "Container.Params", JsonConvert.SerializeObject(query.GetQueryParameters()) }
+            });
         }
 
         #endregion
