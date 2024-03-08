@@ -825,6 +825,7 @@ namespace SFB.Web.Infrastructure.Repositories
             return $"{query} AND (c['{SchoolTrustFinanceDataFieldNames.IS_FEDERATION}'] = false or not is_defined(c['{SchoolTrustFinanceDataFieldNames.IS_FEDERATION}']))";
         }
 
+        // todo: fix potential SQL injection by using parameterized query
         private string BuildQueryFromBenchmarkCriteria(BenchmarkCriteria criteria)
         {
             var queryBuilder = new StringBuilder();
