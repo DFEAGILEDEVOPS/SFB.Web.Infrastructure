@@ -311,10 +311,7 @@ namespace SFB.Web.Infrastructure.Repositories
             var collectionName = await _dataCollectionManager.GetLatestActiveCollectionByDataGroupAsync(DataGroups.Edubase);
 
             var container = _client.GetContainer(_databaseId, collectionName);
-
-            var sb = new StringBuilder();
-            ids.ForEach(u => sb.Append(u + ","));
-
+            
             var queryString = $"SELECT c['{EdubaseDataFieldNames.URN}'], " +
                 $"c['{EdubaseDataFieldNames.ESTAB_NAME}'], " +
                 $"c['{EdubaseDataFieldNames.OVERALL_PHASE}'], " +
@@ -332,32 +329,35 @@ namespace SFB.Web.Infrastructure.Repositories
                 $"c['{EdubaseDataFieldNames.FINANCE_TYPE}'], c['{EdubaseDataFieldNames.IS_FEDERATION}'], c['{EdubaseDataFieldNames.IS_PART_OF_FEDERATION}'], " +
                 $"c['{EdubaseDataFieldNames.FEDERATION_UID}'], c['{EdubaseDataFieldNames.FEDERATION_NAME}'], c['{EdubaseDataFieldNames.FEDERATION_MEMBERS}'], " +
                 $"c['{EdubaseDataFieldNames.FEDERATIONS_CODE}'], c['{EdubaseDataFieldNames.FEDERATION}'] " +
-                $"FROM c WHERE c.{fieldName} IN ({sb.ToString().TrimEnd(',')})";
+                $"FROM c WHERE ARRAY_CONTAINS(@ids, c.{fieldName})";
 
             var results = new List<EdubaseDataObject>();
             try
             {
-                var queryDefinition = new QueryDefinition(queryString);
-                var query = container.GetItemQueryIterator<EdubaseDataObject>();
+                var queryDefinition = new QueryDefinition(queryString)
+                    .WithParameter("@ids", ids);
+                
+                var query = container.GetItemQueryIterator<EdubaseDataObject>(queryDefinition);
                 LogEvent("GetMultipleSchoolDataObjectsByIdsAsync", container.Id, queryDefinition);
 
                 while (query.HasMoreResults)
                 {
                     var response = await query.ReadNextAsync();
-
                     results.AddRange(response.ToList());
                 }
+                
                 if (results.Count < ids.Count)
                 {
-                    throw new Newtonsoft.Json.JsonSerializationException();
+                    throw new JsonSerializationException();
                 }
+                
                 return results;
             }
             catch (Exception ex)
             {
-                var errorMessage = $"{collectionName} could not be loaded! : {ex.Message} : URNs = {sb.ToString().TrimEnd(',')}";
+                var errorMessage = $"{collectionName} could not be loaded! : {ex.Message} : URNs = {string.Join(", ", ids)}";
                 base.LogException(ex, errorMessage);
-                throw new ApplicationException($"One or more documents could not be loaded from {collectionName} : URNs = {sb.ToString().TrimEnd(',')}");
+                throw new ApplicationException($"One or more documents could not be loaded from {collectionName} : URNs = {string.Join(", ", ids)}");
             }
         }
         

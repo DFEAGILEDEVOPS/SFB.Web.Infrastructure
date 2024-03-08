@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net48</TargetFrameworks>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Timestamp>$([System.DateTime]::Now.ToString("yyyyMMddHHmmss"))</Timestamp>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="GovukNotify" Version="4.0.1" />
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.22.0" />
-    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.17.1" />
+    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.38.1" />
     <PackageReference Include="Microsoft.Azure.Search.Data" Version="10.1.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.1" />
@@ -16,9 +16,15 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.4" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="RestSharp" Version="108.0.3" />
-    <PackageReference Include="SFB.Artifacts.ApplicationCore" Version="1.2024.67.80267" />
+    <PackageReference Include="SFB.Artifacts.ApplicationCore" Version="1.2024.68.80279" />
     <PackageReference Include="StackExchange.Redis" Version="2.2.88" />
+    <PackageReference Include="System.Memory" Version="4.5.5" />
     <PackageReference Include="System.Runtime.Caching" Version="6.0.0" />
   </ItemGroup>
+
+  <Target Name="BuildNuget" AfterTargets="AfterBuild" Condition=" '$(Configuration)' == 'Debug' ">
+    <Exec Command="dotnet pack --no-build --include-symbols --output bin --configuration Debug --version-suffix $(Timestamp)"
+          ContinueOnError="WarnAndContinue"/>
+  </Target>
 
 </Project>
