@@ -349,13 +349,21 @@ namespace SFB.Web.Infrastructure.Repositories
             }
             catch (Exception ex)
             {
-                if (term.Contains(_dataCollectionManager.GetLatestFinancialDataYearPerEstabTypeAsync(EstablishmentType.MAT).ToString()))
+                var errorMessage = "Unable to parse document as `SchoolTrustFinancialDataObject`";
+                try
                 {
-                    var errorMessage = $"{collectionName} could not be loaded! : {ex.Message} : {queryDefinition}";
-                    base.LogException(ex, errorMessage);
+                    if (term.Contains(_dataCollectionManager.GetLatestFinancialDataYearPerEstabTypeAsync(EstablishmentType.MAT).ToString()))
+                    {
+                        errorMessage = $"{collectionName} could not be loaded! : {ex.Message} : {queryDefinition}";
+                    }
                 }
-                return null;
+                finally
+                {
+                    LogException(ex, errorMessage);
+                }
             }
+            
+            return null;
         }
 
         public async Task<List<SchoolTrustFinancialDataObject>> GetMultipleTrustFinancialDataObjectsAsync(List<int> companyNoList, string term, MatFinancingType matFinance)
