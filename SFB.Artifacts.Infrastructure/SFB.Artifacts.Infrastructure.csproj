@@ -16,7 +16,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.4" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="RestSharp" Version="108.0.3" />
-    <PackageReference Include="SFB.Artifacts.ApplicationCore" Version="1.2024.121.81231" />
+    <PackageReference Include="SFB.Artifacts.ApplicationCore" Version="1.2024.134.81365" />
     <PackageReference Include="StackExchange.Redis" Version="2.2.88" />
     <PackageReference Include="System.Memory" Version="4.5.5" />
     <PackageReference Include="System.Runtime.Caching" Version="6.0.0" />
